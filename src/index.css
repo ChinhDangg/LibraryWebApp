@@ -1,0 +1,114 @@
+body {
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+/* Display Moving Books Section */
+.display_books_section {
+    margin-top: 30px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.display_books_row {
+    height: 100%;
+    display: flex;
+    width: calc(276px * 14);
+}
+
+#display_books1 { animation: scroll 20s linear infinite; }
+#display_books1:hover { animation-play-state: paused; }
+
+#display_books2 { animation: scroll 25s linear infinite; }
+#display_books2:hover { animation-play-state: paused; }
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-276px * 7))}
+}
+
+.row1 {
+    width: 260px;
+    height: 350px;
+    margin-right: 16px;
+    cursor: pointer;
+}
+
+.row1 img {
+    width: 260px;
+    height: 350px;
+}
+
+/* Display Text Section */
+#display_text_section {
+    margin: 0 auto;
+    margin-top: 50px;
+    max-width: 800px;
+}
+
+#display_text_wrapper {
+    width: 100%;
+}
+
+#display_text_wrapper h1 {
+    display: flex;
+    justify-content: center;
+}
+
+/* Display Relevant Books Section */
+#relevant_books_section {
+    width: 100%;
+    margin-top: 50px;
+}
+
+.relevant_books_wrapper {
+    width: 100%;
+}
+
+.relevant_books_wrapper:last-child  {
+    margin-top: 50px;
+}
+
+.relevant_books_wrapper h2 {
+    margin-left: 20px;
+    font-weight: lighter;
+}
+
+.display_relevant_books {
+    padding-left: 10px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.trending_books, .pick_books {
+    width: calc(100% / 6);
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+.display_relevant_books img {
+    width: 100%;
+    height: 100%;
+}
+
+/* Small screen footer */
+@media screen and (max-width: 768px) {
+    #display_text_wrapper {
+        padding: 0 10px;
+    }
+    #display_text_wrapper h1 {
+        text-align: center;
+    }
+    .trending_books, .pick_books {
+        width: calc(100% / 2);
+        margin-bottom: 10px;
+    }
+}
+
+
+
+

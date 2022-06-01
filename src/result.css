@@ -1,0 +1,103 @@
+body {
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+#result_header_wrapper {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+#result_header {
+    margin-right: 10px;
+}
+
+#all_results_section, #all_results_wrapper {
+    min-height: 300px;
+    width: 100%;
+    height: 100%;
+}
+
+.result_row {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 30px;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.result_row:not(:first-child) {
+    margin-top: 30px;
+}
+
+.result_row:not(:last-child) {
+    border-bottom: 1px solid gray;
+}
+
+.cover_wrapper {
+    margin-right: 20px;
+}
+
+.cover_wrapper {
+    width: 150px;
+    height: 205px;
+}
+
+.cover_wrapper img {
+    width: 100%;
+}
+
+.info_and_cart_wrapper {
+    width: 400px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+
+.result_info_wrapper {
+    width: 100%;
+}
+
+/* Small screen navigation */
+@media screen and (max-width: 768px) {
+    .result_row {
+        width: 100%;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .cover_wrapper {
+        flex: 40%;
+        width: 100%;
+        height: 100%;
+    }
+    .info_and_cart_wrapper {
+        width: 100%;
+        flex: 60%;
+    }
+}
+
+/* .addTo_cart_wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.addTo_cart_button {
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
+    color: white;
+    background-color: black;
+    padding: 15px 30px;
+    border-radius: 2px;
+    cursor: pointer;
+} 
+
+<div class="addTo_cart_wrapper">
+    <div>
+        <div class="addTo_cart_button">Add to Cart</div>
+    </div>
+</div>
+
+*/
