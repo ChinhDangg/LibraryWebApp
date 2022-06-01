@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="University Library Website Application">
     <link rel="stylesheet" href="Font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="nav.css">
-    <link rel="stylesheet" type="text/css" href="footer.css">
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="css/nav.css">
+    <link rel="stylesheet" type="text/css" href="css/footer.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
     <title>University Library</title>
 </head>
 <body>
@@ -93,6 +93,6 @@
 
     <?php include 'footer.php';?>
 
-    <script src="index.js"></script>
+    <script src="js/index.js"></script>
 </body>
 </html>

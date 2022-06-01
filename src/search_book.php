@@ -1,6 +1,6 @@
 <?php
 
-$con = new mysqli('mysql_db', 'root', 'root', 'test_db');
+$con = new mysqli('mysql_db', 'root', 'root', 'uni_book_db');
 if (!$con) {
     echo "Fail";
     die("Connection failed: " .mysqli_connect_errno());
@@ -9,7 +9,7 @@ if (!$con) {
 $sql = "";
 function getSqlType($search_info) {
     if (preg_match('/^[0-9]+$/', $search_info)) { //contains number only
-        if (strlen($search_info) == 13) { //length = 10
+        if (strlen($search_info) == 13) { //length = 13
             // echo "ISBN length 10". "<br>";
             global $sql;
             $sql = "SELECT Title, Author, ISBN FROM Books WHERE ISBN=$search_info";
@@ -78,9 +78,9 @@ mysqli_close($con);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="University Library Website Application">
     <link rel="stylesheet" href="Font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="nav.css">
-    <link rel="stylesheet" type="text/css" href="result.css">
-    <link rel="stylesheet" type="text/css" href="footer.css">
+    <link rel="stylesheet" type="text/css" href="css/nav.css">
+    <link rel="stylesheet" type="text/css" href="css/result.css">
+    <link rel="stylesheet" type="text/css" href="css/footer.css">
     <title>Book Search Result</title>
 </head>
 <body>

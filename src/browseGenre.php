@@ -1,6 +1,6 @@
 <?php
 if ($_GET['genre'] !== "") {
-    $con = new mysqli('mysql_db', 'root', 'root', 'test_db');
+    $con = new mysqli('mysql_db', 'root', 'root', 'uni_book_db');
     if (!$con) {
         echo "Fail";
         die("Connection failed: " .mysqli_connect_errno());
@@ -26,9 +26,9 @@ else {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="University Library Website Application">
     <link rel="stylesheet" href="Font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="nav.css">
-    <link rel="stylesheet" type="text/css" href="footer.css">
-    <link rel="stylesheet" type="text/css" href="browseGenre.css">
+    <link rel="stylesheet" type="text/css" href="css/nav.css">
+    <link rel="stylesheet" type="text/css" href="css/footer.css">
+    <link rel="stylesheet" type="text/css" href="css/browseGenre.css">
     <title>Browse Book by Genre</title>
 </head>
 <body>
