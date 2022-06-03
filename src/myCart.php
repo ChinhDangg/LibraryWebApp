@@ -1,4 +1,5 @@
 <?php
+include 'loginCredential.php';
 $con = new mysqli('mysql_db', 'root', 'root', 'uni_book_db');
 if (!$con) {
     echo "Fail";

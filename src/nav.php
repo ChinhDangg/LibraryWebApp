@@ -41,7 +41,7 @@
 
         <div id="search_wrapper">
             <div id="type_search">
-                <form action="search_book.php" method="post" id="form_wrapper">
+                <form action="result.php" method="post" id="form_wrapper">
                     <input id="input_book_search" type="search" name="input_book_search" placeholder="Search by Title, Author, or ISBN">
                     <div id="submit_icon_wrapper">
                         <input id="search_submit_icon" type="image" src="Pic/search.png" alt="Submit">

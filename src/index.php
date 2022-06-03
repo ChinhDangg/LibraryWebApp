@@ -1,3 +1,5 @@
+<?php include 'loginCredential.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

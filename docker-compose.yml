@@ -1,11 +1,11 @@
-version: '4.8'
+version: '3.9'
 
 services:
   php-env:
-    build:
+    build: .
     volumes:
       - ./src:/var/www/html
-    port:
+    ports:
       - 9000:80
 
   mysql_db:
