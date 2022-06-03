@@ -6,7 +6,7 @@ if ($_GET['isbn'] !== "") {
         die("Connection failed: " .mysqli_connect_errno());
     }
     $isbn = mysqli_real_escape_string($con, $_GET['isbn']);
-    $sql = "SELECT Title, Author, ISBN, Genre, Copies, Published, Summary, Publisher FROM Books WHERE ISBN='$isbn'";
+    $sql = "SELECT Title, Author, ISBN, Genre, Stock, Published, Summary, Publisher FROM Books WHERE ISBN='$isbn'";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_array($result);
     if (mysqli_num_rows($result) < 1)
@@ -62,15 +62,14 @@ else {
             </div>
         </div>
         <div id="book_available_option_wrapper">
-            <div id="book_text_option_wrapper">Available Slot: <?php echo $row["Copies"]; ?></div>
+            <div id="book_text_option_wrapper">Available Slot: <?php echo $row["Stock"]; ?></div>
             <div id="book_option_button_wrapper">
                 <div id="book_option_button">
-                    <?php //href="myCart.php?isbn='.$row["ISBN"].'"
-                            //href="reservedBook.php?isbn='.$row["ISBN"].'"
-                        if ($row["Copies"] > 0)
+                    <?php
+                        if ($row["Stock"] > 0)
                             echo '<a href="myCart.php">Add to Cart</a>';
                         else
-                            echo '<a >Add to Reservation List</a>';
+                            echo '<a href="reservedBook.php">Add to Reservation List</a>';
                     ?>
                 </div>
             </div>
@@ -79,10 +78,19 @@ else {
 
     <?php include 'footer.php';?>
 
-    <?php
+    <?php //add to reservation list
+        if ($row["Stock"] < 0) {
+            
+        }
+
+
+
+    ?>
+
+    <?php //add book to cart
         echo '
         <script>
-            if ('.$row["Copies"].' > 0) {
+            if ('.$row["Stock"].' > 0) {
                 document.getElementById("book_option_button").addEventListener("click", function(event) {
                     let books = [];
                     if (localStorage.getItem("cartBook")) {

@@ -10,7 +10,6 @@ $sql = "";
 function getSqlType($search_info) {
     if (preg_match('/^[0-9]+$/', $search_info)) { //contains number only
         if (strlen($search_info) == 13) { //length = 13
-            // echo "ISBN length 10". "<br>";
             global $sql;
             $sql = "SELECT Title, Author, ISBN FROM Books WHERE ISBN=$search_info";
         }
@@ -29,45 +28,8 @@ if (!empty($_POST["input_book_search"])) {
         $result = mysqli_query($con, $sql);
     }
 }
-
 // closing connection
 mysqli_close($con);
-
-
-
-// if (is_null($row)) {
-//     echo "not found". "<br>";
-// }
-// else {
-//     echo "Book found <br>";
-//     echo $row["Title"]. "<br>";
-//     echo $row["Author"]. "<br>";
-//     echo $row["ISBN"]. "<br>";
-//     echo $row["Genre"]. "<br>";
-// }
-
-
-
-// $sql = "SELECT * FROM Books WHERE Author='Author 1' ";
-// $result = mysqli_query($con, $sql);
-// $row = mysqli_fetch_array($result);
-
-// echo "Title: " .$row["Title"]. "<br>";
-// echo "Author: " .$row["Author"]. "<br>";
-// echo "ISBN: " .$row["ISBN"]. "<br>";
-
-
-// $sql = "SELECT Title, Author, ISBN, Genre FROM Books";
-// $result = mysqli_query($con, $sql);
-
-// if (mysqli_num_rows($result) > 0) {
-//     //output data of each row
-//     while($row = mysqli_fetch_assoc($result)) {
-//         echo "TItle: " .$row["Title"]. " - Author: " . $row["Author"]. " - ISBN " . $row["ISBN"]. "<br>";
-//     }
-// } else {
-//     echo "0 results";
-// }
 ?>
 
 <!DOCTYPE html>
@@ -111,16 +73,14 @@ mysqli_close($con);
                     while($row = mysqli_fetch_assoc($result)) {
                         echo '
                         <div class="result_row">
-                            <div class="cover_wrapper">
+                            <a class="cover_wrapper" href="bookInfo.php?isbn='.$row["ISBN"].'">
                                 <img src="DisplayBooks/display1.jpg" alt="result_img">
-                            </div>
-                            <div class="info_and_cart_wrapper">
-                                <div class="result_info_wrapper">
-                                    <h3>'.$row["Title"].'</h3>
-                                    <div>by '.$row["Author"].'</div>
-                                    <div>ISBN: '.$row["ISBN"].'</div>
-                                </div>
-                            </div>
+                            </a>
+                            <a class="result_info_wrapper" href="bookInfo.php?isbn='.$row["ISBN"].'">
+                                <h3>'.$row["Title"].'</h3>
+                                <div>by '.$row["Author"].'</div>
+                                <div>ISBN: '.$row["ISBN"].'</div>
+                            </a>
                         </div>
                         ';
                     }

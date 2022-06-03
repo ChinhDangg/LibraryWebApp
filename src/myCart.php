@@ -29,13 +29,17 @@ if (!$con) {
         <h1 id="result_header">My Cart</h1>
     </div>
 
-    <?php if (!isset($_COOKIE["cartBook"])) echo '<h2 style="margin-left: 100px">Your Cart is Empty. Go browse some books</h2>' ?> 
+    <h2 id="cart_empty_alert_display" style="margin: 0 0 0 100px">
+        <?php if (!isset($_COOKIE["cartBook"]) || $_COOKIE["cartBook"] == "") 
+            echo 'Your Cart is Empty. Go browse some books' 
+        ?>
+    </h2> 
 
     <section id="all_results_section">
         <div id="result_checkout_wrapper">
             <div id="all_results_wrapper">
                 <?php 
-                    if (isset($_COOKIE["cartBook"])) {
+                    if (isset($_COOKIE["cartBook"]) && $_COOKIE["cartBook"] != "") {
                         $book_result_list = explode(",", $_COOKIE["cartBook"]);
                         for ($books = 0; $books < count($book_result_list); $books++) {
                             $isbn = $book_result_list[$books];
@@ -56,11 +60,14 @@ if (!$con) {
                                                 <div class="cart_book_time">Read Time: 6 weeks</div>
                                             </div>
                                             <div class="remove_book_wrapper">
-                                                <i class="fa fa-trash fa-2x"></i>
+                                                <i class="fa fa-trash fa-2x" onclick="removeBook('.$row["ISBN"].')"></i>
                                             </div>
                                         </div>
                                     </div>
                                 ';
+                            }
+                            else {
+                                unset($book_result_list[$books]);
                             }
                         }
                         // closing connection
@@ -70,24 +77,48 @@ if (!$con) {
 
             </div>
             <?php 
-                if (isset($_COOKIE["cartBook"]))
+                if (isset($_COOKIE["cartBook"]) && $_COOKIE["cartBook"] != "")
                     echo '
-                    <div id="cart_checkout_wrapper">
-                        <div>
-                            <div id="cart_checkout_total"><h3>Total: #</h3></div>
-                            <div id="cart_checkout_button_wrapper">
-                                <div id="cart_checkout_button">Checkout</div>
+                        <div id="cart_checkout_wrapper">
+                            <div>
+                                <div id="cart_checkout_total_wrapper"><h3 id="cart_checkout_total">Total: '.count($book_result_list).'</h3></div>
+                                <div id="cart_checkout_button_wrapper">
+                                    <div id="cart_checkout_button">Checkout</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     ';
             ?>
         </div>  
     </section> 
 
     <?php include 'footer.php';?>
-    <!-- <script>
-        localStorage.clear();
-    </script> -->
+        
+    <?php
+        if (isset($_COOKIE["cartBook"])) {
+            echo '
+                <script>                    
+                    function removeBook(ISBN) {
+                        let stored_book = localStorage.getItem("cartBook").split(",");
+                        for (let j = 0; j < stored_book.length; j++) {
+                            if (stored_book[j] == ISBN) {
+                                document.getElementsByClassName("result_row")[j].remove();
+                                stored_book.splice(j, 1);
+                                localStorage.setItem("cartBook", stored_book);
+                                document.cookie = "cartBook="+localStorage.getItem("cartBook")+";"
+                                document.getElementById("cart_checkout_total").innerText = "Total: "+stored_book.length;
+                                if (stored_book.length == 0) {
+                                    document.getElementById("cart_checkout_wrapper").remove();
+                                    document.getElementById("cart_empty_alert_display").innerText = "Your Cart is Empty. Go browse some books";
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                </script>
+            ';
+        }
+    ?>
 </body>
 </html>

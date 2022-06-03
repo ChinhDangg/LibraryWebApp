@@ -1,0 +1,48 @@
+body {
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+#result_header_wrapper {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+#result_header {
+    margin-right: 10px;
+}
+
+#reserved_book_section {
+    min-height: 300px;
+    width: 100%;
+    height: 100%;
+}
+
+#all_reserved_book_wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.reserved_book_wrapper {
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
+.reserved_book_img_wrapper img {
+    width: 200px;
+    height: 250px;
+}
+
+.current_state, .add_to_cart {
+    text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    .reserved_book_wrapper {
+        margin-bottom: 40px;
+    }
+}
+
+
