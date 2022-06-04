@@ -19,8 +19,9 @@ if (mysqli_num_rows($result) > 0) {
     while($row = mysqli_fetch_assoc($result)) {
         $isbn = $row["ISBN"];
         if ($row["Available"] != 0) { //if book is available (given), check book due to checkout
-            if ($row["Due"] < time()) { //due date is passed
-                $sql = "DELETE FROM Reserved_Books WHERE Due=$due_date && Email='$user'";
+            $due_time = $row["Due"];
+            if ($due_time < time()) { //due date is passed
+                $sql = "DELETE FROM Reserved_Books WHERE Due=$due_time && Email='$user'";
                 $remove_result = mysqli_query($con, $sql); //remove due reserved book from list
                 $sql = "SELECT Stock FROM Books WHERE ISBN=$isbn";
                 $update_stock = mysqli_fetch_array(mysqli_query($con, $sql))["Stock"] + 1; //add one copy to stock
@@ -33,9 +34,13 @@ if (mysqli_num_rows($result) > 0) {
             $check_stock = mysqli_fetch_array(mysqli_query($con, $sql))["Stock"];
             if ($check_stock > 0) { //if stock available now - give book to very first few
                 $due_time = time() + 1209600; //+ 2 weeks due date to checkout
-                $sql = "UPDATE Reserved_Books SET Available=1, Due=$due_date WHERE ISBN=$isbn && Available<>1 LIMIT $check_stock";
+                $sql = "UPDATE Reserved_Books SET Available=1, Due=$due_time WHERE ISBN=$isbn && Available<>1 LIMIT $check_stock";
                 $give_bookTo_firstuser = mysqli_query($con, $sql);
             }
+            $sql = "SELECT ID FROM Reserved_Books WHERE ISBN=$isbn AND Available=1";
+            $update_stock = $check_stock - mysqli_num_rows(mysqli_query($con, $sql));
+            $sql = "UPDATE Books SET Stock = $update_stock WHERE ISBN=$isbn";
+            $update_stock_result = mysqli_query($con, $sql); //update new stock
         }
     }
 }
