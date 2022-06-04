@@ -1,5 +1,5 @@
 <?php
-    setcookie("user", "", time() + (86400 * 0), "/"); // 86400 = 1 day
+    setcookie("username", "", time() + (86400 * 0), "/"); // 86400 = 1 day
 ?>
 
 <!DOCTYPE html>

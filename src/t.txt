@@ -1,0 +1,16 @@
+when loaded reserved book page:
+	check all reserved book for their 
+    availability status for current user:
+Available: add a due date of 2 weeks to 
+checkout their book, passed date - 
+remove book from list. add it 
+back to stock for others
+How is available?: check stock of the book - 
+for each stock available, give it to the 
+very first people. if current user 
+is one of them make it available 
+(load this to bookinfo page as update stock 
+considering reservation). 
+
+
+Unavailable: nothing

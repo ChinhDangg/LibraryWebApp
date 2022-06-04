@@ -5,6 +5,59 @@ if (!$con) {
     echo "Fail";
     die("Connection failed: " .mysqli_connect_errno());
 }
+
+// $sql = "INSERT INTO Reserved_Books (ISBN, Email)
+// VALUES (9780273718703, 'john@example.com');";
+// mysqli_query($con, $sql);
+
+$user = $_COOKIE["username"];
+$sql = "SELECT ISBN, Available, Due FROM Reserved_Books WHERE Email='$user'";
+$result = mysqli_query($con, $sql); //all reserved books from current user
+
+if (mysqli_num_rows($result) > 0) {
+    //output data of each row
+    while($row = mysqli_fetch_assoc($result)) {
+        $isbn = $row["ISBN"];
+        if ($row["Available"] != 0) { //if book is available (given), check book due to checkout
+            if ($row["Due"] < time()) { //due date is passed
+                $sql = "DELETE FROM Reserved_Books WHERE Due=$due_date && Email='$user'";
+                $remove_result = mysqli_query($con, $sql); //remove due reserved book from list
+                $sql = "SELECT Stock FROM Books WHERE ISBN=$isbn";
+                $update_stock = mysqli_fetch_array(mysqli_query($con, $sql))["Stock"] + 1; //add one copy to stock
+                $sql = "UPDATE Books SET Stock = $update_stock WHERE ISBN=$isbn";
+                $update_stock_result = mysqli_query($con, $sql); //update new stock
+            }
+        }
+        else { //previously unavailable
+            $sql = "SELECT Stock FROM Books WHERE ISBN=$isbn";
+            $check_stock = mysqli_fetch_array(mysqli_query($con, $sql))["Stock"];
+            if ($check_stock > 0) { //if stock available now - give book to very first few
+                $due_time = time() + 1209600; //+ 2 weeks due date to checkout
+                $sql = "UPDATE Reserved_Books SET Available=1, Due=$due_date WHERE ISBN=$isbn && Available<>1 LIMIT $check_stock";
+                $give_bookTo_firstuser = mysqli_query($con, $sql);
+            }
+        }
+    }
+}
+
+
+// $sql = "SELECT Due FROM Reserved_Books WHERE ISBN='9780273718703'";
+// $result = mysqli_query($con, $sql);
+// if (mysqli_num_rows($result) > 0) {
+//     //output data of each row
+//     while($row = mysqli_fetch_assoc($result)) {
+//         echo $row["Due"]. "<br>";
+//         $date = date('Y-m-d h:i:s', time());
+//         if ($row["Due"] < $date) {
+//             echo "smaller <br>";
+//         }
+//         else echo "larger <br>";
+//     }
+// }
+
+// $date = date('Y-m-d h:i:s', time());
+// echo $date;
+
 ?>
 
 <!DOCTYPE html>

@@ -1,7 +1,6 @@
 <?php
-if ($_GET['user'] == 'Students' || $_GET['user'] == 'Staffs') {
+if ($_GET['user'] == 'Students' || $_GET['user'] == 'Staffs')
     session_start();
-}
 else
     header('Location: userCheck.php');
 ?>
@@ -24,7 +23,7 @@ else
     <section id="login_area_section">
         <div id="login_area_wrapper">
             <h1>Sign in to start borrowing books</h1>
-            <?php if (isset($_SESSION["wrongpassword"]) && $_SESSION["wrongpassword"] == "wrong")
+            <?php if (isset($_SESSION["wrongpassword"]))
                 echo '<div style="margin-bottom: 20px; text-align: center">Incorrect email or username</div>'; 
                 session_destroy();
             ?>
