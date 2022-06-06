@@ -1,5 +1,5 @@
 <?php
-if ($_GET['user'] == 'Students' || $_GET['user'] == 'Staffs')
+if (isset($_GET['user']) && ($_GET['user'] == 'Students' || $_GET['user'] == 'Staffs'))
     session_start();
 else
     header('Location: userCheck.php');

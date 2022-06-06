@@ -42,10 +42,6 @@ body {
     margin-bottom: 40px;
 }
 
-#book_text_option_wrapper {
-    margin-bottom: 15px;
-}
-
 #book_available_option_wrapper {
     display: flex;
     flex-direction: column;
@@ -53,12 +49,14 @@ body {
     margin-top: 20px;
 }
 
-#book_option_button a {
+.book_option {
     width: 100%;
     color: white;
     background-color: black;
     padding: 15px 30px;
+    border: none;
     border-radius: 2px;
+    cursor: pointer;
 }
 
 /* Small screen */

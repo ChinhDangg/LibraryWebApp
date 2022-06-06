@@ -30,14 +30,46 @@ body {
     margin-bottom: 5px;
 }
 
+.reserved_book_wrapper:hover {
+    box-shadow: 1px 10px #888888;
+}
+
+.reserved_book_wrapper:hover .reserved_book_img_wrapper{
+    opacity: 0.8 !important;
+}
+
 .reserved_book_img_wrapper img {
     width: 200px;
     height: 250px;
 }
 
-.current_state, .add_to_cart {
+.book_current_state, .book_isbn {
     text-align: center;
 }
+
+#book_option_wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    min-height: 50px;
+}
+
+#book_option_wrapper form {
+    width: fit-content;
+}
+
+#book_option {
+    width: 100%;
+    color: white;
+    background-color: black;
+    padding: 15px 30px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: none;
+    display: none;
+}
+
+
 
 @media screen and (max-width: 768px) {
     .reserved_book_wrapper {

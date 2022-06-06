@@ -6,8 +6,12 @@ if (!$con) {
     die("Connection failed: " .mysqli_connect_errno());
 }
 
-// unset($_COOKIE['cartBook']); 
-// setcookie('cartBook', null, -1, '/'); 
+// echo $_COOKIE["username"]."<br>";
+// $t = $_COOKIE["username"];
+// echo $_COOKIE[$t];
+
+// unset($_COOKIE['cartBookUser']); 
+// setcookie('cartBookUser', null, -1, '/');  
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +35,9 @@ if (!$con) {
     </div>
 
     <h2 id="cart_empty_alert_display" style="margin: 0 0 0 100px">
-        <?php if (!isset($_COOKIE["cartBook"]) || $_COOKIE["cartBook"] == "") 
+        <?php 
+        $user = $_COOKIE["username"];
+        if (!isset($_COOKIE[$user]) || $_COOKIE[$user] == "") 
             echo 'Your Cart is Empty. Go browse some books' 
         ?>
     </h2> 
@@ -40,8 +46,8 @@ if (!$con) {
         <div id="result_checkout_wrapper">
             <div id="all_results_wrapper">
                 <?php 
-                    if (isset($_COOKIE["cartBook"]) && $_COOKIE["cartBook"] != "") {
-                        $book_result_list = explode(",", $_COOKIE["cartBook"]);
+                    if (isset($_COOKIE[$user]) && $_COOKIE[$user] != "") {
+                        $book_result_list = explode(",", $_COOKIE[$user]);
                         for ($books = 0; $books < count($book_result_list); $books++) {
                             $isbn = $book_result_list[$books];
                             $sql = "SELECT Title, Author, ISBN FROM Books WHERE ISBN='$isbn'";
@@ -51,15 +57,17 @@ if (!$con) {
                                 echo '
                                     <div class="result_row">
                                         <div class="cover_wrapper">
-                                            <img src="DisplayBooks/display1.jpg" alt="result_img">
+                                            <a href="bookInfo.php?isbn='.$row["ISBN"].'"><img src="DisplayBooks/display1.jpg" alt="result_img"></a>
                                         </div>
                                         <div class="info_and_cart_wrapper">
-                                            <div class="result_info_wrapper">
-                                                <h3>'.$row["Title"].'</h3>
-                                                <div>by '.$row["Author"].'</div>
-                                                <div>ISBN: '.$row["ISBN"].'</div>
-                                                <div class="cart_book_time">Read Time: 6 weeks</div>
-                                            </div>
+                                            <a href="bookInfo.php?isbn='.$row["ISBN"].'">
+                                                <div class="result_info_wrapper">
+                                                    <h3>'.$row["Title"].'</h3>
+                                                    <div>by '.$row["Author"].'</div>
+                                                    <div>ISBN: '.$row["ISBN"].'</div>
+                                                    <div class="cart_book_time">Read Time: 6 weeks</div>
+                                                </div>
+                                            </a>
                                             <div class="remove_book_wrapper">
                                                 <i class="fa fa-trash fa-2x" onclick="removeBook('.$row["ISBN"].')"></i>
                                             </div>
@@ -78,7 +86,7 @@ if (!$con) {
 
             </div>
             <?php 
-                if (isset($_COOKIE["cartBook"]) && $_COOKIE["cartBook"] != "")
+                if (isset($_COOKIE[$user]) && $_COOKIE[$user] != "")
                     echo '
                         <div id="cart_checkout_wrapper">
                             <div>
@@ -96,17 +104,17 @@ if (!$con) {
     <?php include 'footer.php';?>
         
     <?php
-        if (isset($_COOKIE["cartBook"])) {
+        if (isset($_COOKIE[$user])) {
             echo '
                 <script>                    
                     function removeBook(ISBN) {
-                        let stored_book = localStorage.getItem("cartBook").split(",");
+                        let stored_book = localStorage.getItem("'.$user.'").split(",");
                         for (let j = 0; j < stored_book.length; j++) {
                             if (stored_book[j] == ISBN) {
                                 document.getElementsByClassName("result_row")[j].remove();
                                 stored_book.splice(j, 1);
-                                localStorage.setItem("cartBook", stored_book);
-                                document.cookie = "cartBook="+localStorage.getItem("cartBook")+";"
+                                localStorage.setItem("'.$user.'", stored_book);
+                                document.cookie = "'.$user.'="+localStorage.getItem("'.$user.'")+"; max-age=864000; path=/";
                                 document.getElementById("cart_checkout_total").innerText = "Total: "+stored_book.length;
                                 if (stored_book.length == 0) {
                                     document.getElementById("cart_checkout_wrapper").remove();

@@ -12,8 +12,6 @@ if ($_GET['isbn'] !== "") {
     $row = mysqli_fetch_array($result);
     if (mysqli_num_rows($result) < 1)
         header('Location: browse.php');
-    // closing connection
-    mysqli_close($con);
 }
 else {
     header('Location: index.php');
@@ -34,6 +32,19 @@ else {
     <title>View Book</title>
 </head>
 <body>
+    <?php
+        $user = $_COOKIE["username"];
+        if(isset($_POST['add_to_reservationList'])) {
+            $isbn = $row["ISBN"];
+            $user = str_replace("_", ".", $user);
+            $sql = "SELECT ID FROM Reserved_Books WHERE ISBN=$isbn AND Email='$user'";
+            if (mysqli_num_rows(mysqli_query($con, $sql)) <= 0) { //if book is not in reservation list
+                $sql = "INSERT INTO Reserved_Books (ISBN, Email, Available, Due)
+                VALUES ($isbn, '$user', 0, 0)"; //add new book to reservation list
+                $add_book_result = mysqli_query($con, $sql);;
+            }
+        }
+    ?>
     <?php include 'nav.php';?>
 
     <section id="book_info_section">
@@ -68,49 +79,45 @@ else {
                 <div id="book_option_button">
                     <?php
                         if ($row["Stock"] > 0)
-                            echo '<a href="myCart.php">Add to Cart</a>';
+                            echo '<div class="book_option">Add to Cart </div>';
                         else
-                            echo '<a href="reservedBook.php">Add to Reservation List</a>';
+                            echo '
+                                <form method="post">
+                                    <input type="submit" name="add_to_reservationList" value="Add to Reservation List" class="book_option"/>
+                                </form>
+                            ';
                     ?>
                 </div>
             </div>
         </div>
     </section>
 
-    <?php include 'footer.php';?>
-
-    <?php //add to reservation list
-        if ($row["Stock"] < 0) {
-            
-        }
-
-
-
-    ?>
-
-    <?php //add book to cart
-        echo '
-        <script>
-            if ('.$row["Stock"].' > 0) {
-                document.getElementById("book_option_button").addEventListener("click", function(event) {
-                    let books = [];
-                    if (localStorage.getItem("cartBook")) {
-                        if (!localStorage.getItem("cartBook").includes("'.$row["ISBN"].'")) {
-                            books.push(localStorage.getItem("cartBook"), "'.$row["ISBN"].'");
-                            localStorage.setItem("cartBook", books);
+    <?php
+        if ($row["Stock"] > 0) { //add book to cart
+            echo '
+                <script>
+                    document.getElementById("book_option_button").addEventListener("click", function(event) {
+                        let books = [];
+                        if (localStorage.getItem("'.$user.'")) {
+                            if (!localStorage.getItem("'.$user.'").includes("'.$row["ISBN"].'")) {
+                                books.push(localStorage.getItem("'.$user.'"), "'.$row["ISBN"].'");
+                                localStorage.setItem("'.$user.'", books);
+                            }
                         }
-                    }
-                    else {
-                        books.push("'.$row["ISBN"].'");
-                        localStorage.setItem("cartBook", books);
-                    }
-                    document.cookie = "cartBook="+localStorage.getItem("cartBook")+";"
-                    console.log(localStorage.getItem("cartBook"));
-                });
-            }
-        </script>
-        ';
+                        else {
+                            books.push("'.$row["ISBN"].'");
+                            localStorage.setItem("'.$user.'", books);
+                        }
+                        document.cookie = "'.$user.'="+localStorage.getItem("'.$user.'")+"; max-age=864000; path=/";
+                        console.log(document.cookie);
+                    });
+                </script>
+            ';
+        }
+        // closing connection
+        mysqli_close($con);
     ?>
+    <?php include 'footer.php';?>
     
 </body>
 </html>

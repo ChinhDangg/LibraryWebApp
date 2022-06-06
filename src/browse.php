@@ -5,8 +5,6 @@ if (!$con) {
     echo "Fail";
     die("Connection failed: " .mysqli_connect_errno());
 }
-// SELECT DISTINCT Country FROM Customers;
-
 $sql = "SELECT DISTINCT Genre FROM Books";
 $result = mysqli_query($con, $sql);
 ?>
@@ -62,7 +60,7 @@ $result = mysqli_query($con, $sql);
                                 echo '</div>
                                 <div class="view_more_wrapper">
                                     <a href="browseGenre.php?genre='.$row["Genre"].'">
-                                        <i class="fa fa-caret-right fa-2x"></i>
+                                        <i class="fa fa-caret-right"></i>
                                         <div class="view_more_button">View More</div>
                                     </a>
                                 </div>
