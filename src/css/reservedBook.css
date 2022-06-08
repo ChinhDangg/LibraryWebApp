@@ -39,6 +39,7 @@ body {
 }
 
 .reserved_book_img_wrapper img {
+    padding: 10px;
     width: 200px;
     height: 250px;
 }
@@ -74,6 +75,9 @@ body {
 @media screen and (max-width: 768px) {
     .reserved_book_wrapper {
         margin-bottom: 40px;
+    }
+    #no_reserved_book_header {
+        margin-left: 10px !important;
     }
 }
 

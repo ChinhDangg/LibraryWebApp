@@ -10,8 +10,9 @@ if (!$con) {
 // $t = $_COOKIE["username"];
 // echo $_COOKIE[$t];
 
-// unset($_COOKIE['cartBookUser']); 
-// setcookie('cartBookUser', null, -1, '/');  
+// $user = $_COOKIE["username"];
+// unset($_COOKIE[$user]); 
+// setcookie($user, null, -1, '/');  
 ?>
 
 <!DOCTYPE html>
@@ -106,7 +107,8 @@ if (!$con) {
     <?php
         if (isset($_COOKIE[$user])) {
             echo '
-                <script>                    
+                <script>
+                    console.log(document.cookie);                   
                     function removeBook(ISBN) {
                         let stored_book = localStorage.getItem("'.$user.'").split(",");
                         for (let j = 0; j < stored_book.length; j++) {
@@ -119,7 +121,9 @@ if (!$con) {
                                 if (stored_book.length == 0) {
                                     document.getElementById("cart_checkout_wrapper").remove();
                                     document.getElementById("cart_empty_alert_display").innerText = "Your Cart is Empty. Go browse some books";
+                                    document.getElementById("cart_num_item_wrapper").innerHTML = "";
                                 }
+                                else document.getElementById("cart_num_item_wrapper").innerHTML = localStorage.getItem("'.$user.'").split(",").length; //update cart number icon 
                                 break;
                             }
                         }

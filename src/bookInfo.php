@@ -45,7 +45,8 @@ else {
             }
         }
     ?>
-    <?php include 'nav.php';?>
+
+    <?php include "nav.php" ?>
 
     <section id="book_info_section">
         <div id="book_info_wrapper">
@@ -109,7 +110,7 @@ else {
                             localStorage.setItem("'.$user.'", books);
                         }
                         document.cookie = "'.$user.'="+localStorage.getItem("'.$user.'")+"; max-age=864000; path=/";
-                        console.log(document.cookie);
+                        document.getElementById("cart_num_item_wrapper").innerHTML = localStorage.getItem("'.$user.'").split(",").length; //update cart number icon                    
                     });
                 </script>
             ';

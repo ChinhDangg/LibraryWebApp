@@ -1,67 +1,104 @@
 <?php 
+    $user = $_COOKIE["username"];
+    $user = str_replace("_", ".", $user);
+    $sql = "SELECT ISBN FROM Reserved_Books WHERE Email='$user'";
+    $reserved_book_count_result = mysqli_query($con, $sql); //all reserved books from current user
+    $reserved_book_count = (mysqli_num_rows($reserved_book_count_result) > 0) ? mysqli_num_rows($reserved_book_count_result) : "";
+    
     echo '
     <div id="side_menu_wrapper">
-        <div id="menu_heading_wrapper">
-            <div></div>
-            <div id="menu_header_wrapper"><h2>Menu</h2></div>
-            <div><i class="fa fa-times fa-lg" id="side_menu_x_button" aria-hidden="true"></i></div>
+    <div id="menu_heading_wrapper">
+        <div></div>
+        <div id="menu_header_wrapper"><h2>Menu</h2></div>
+        <div><i class="fa fa-times fa-lg" id="side_menu_x_button" aria-hidden="true"></i></div>
+    </div>
+    <div id="menu_link_wrapper">
+        <i class="fa fa-globe" aria-hidden="true"></i>
+        <a class="browse_link" href="browse.php">Browse</a>
+    </div>
+</div>
+
+<nav>
+    <div id="nav_link_wrapper">
+        <div class="leftside_link_wrapper" id="menu_wrapper">
+            <div id="menu_icon_wrapper">
+                <img src="Pic/menu.jpg" alt="menu_icon">
+            </div>
         </div>
-        <div id="menu_link_wrapper">
-            <i class="fa fa-globe" aria-hidden="true"></i>
-            <a class="browse_link" href="browse.php">Browse</a>
+
+        <div class="leftside_link_wrapper">
+            <div id="logo_wrapper">
+                <a href="index.php"><img src="Pic/logo.png"></a>
+            </div>
+            <div class="browse_wrapper">
+                <a class="browse_link" href="browse.php">Browse</a>
+            </div>
+        </div>
+
+        <div id="rightside_link_wrapper">
+            <div id="account_wrapper">
+                <i id="account_icon" class="fa fa-user-circle-o fa-2x"></i>
+                <div class="reserved_book_count_icon">'.$reserved_book_count.'</div>
+                <div id="account_pop_up_box">
+                    <div id="triangle"></div>
+                    <div id="message">
+                        <a href="reservedBook.php"><i class="fa fa-cog fa-lg"></i>View Account</a>
+                        <a href="reservedBook.php"><i class="fa fa-book fa-lg"></i>My Books</a>
+                        <a href="reservedBook.php" id="reserved_book_link">
+                            <i class="fa fa-clock-o fa-lg"></i>
+                            <div id="reserved_book_link_text">Reserved Books</div>
+                            <div class="reserved_book_count_icon">'.$reserved_book_count.'</div>
+                        </a>
+                        <a href="reservedBook.php"><i class="fa fa-unlock-alt fa-lg"></i>Change Password</a>
+                        <a href="reservedBook.php"><i class="fa fa-sign-out fa-lg"></i>Log-out</a>
+                    </div>
+                </div>
+            </div>
+            <div id="cart_wrapper">
+                <a href="myCart.php" id="cart_link_wrapper">
+                    <i class="fa fa-shopping-basket fa-2x"></i>
+                    <div id="cart_num_item_wrapper">';
+                        $user = $_COOKIE["username"];
+                        $num_cart_book = count(explode(",", $_COOKIE[$user]));
+                        if (!empty($_COOKIE[$user]) && $num_cart_book > 0) 
+                            echo $num_cart_book;
+              echo '</div>
+                </a>
+            </div>
         </div>
     </div>
 
-    <nav>
-        <div id="nav_link_wrapper">
-            <div class="leftside_link_wrapper" id="menu_wrapper">
-                <div id="menu_icon_wrapper">
-                    <img src="Pic/menu.jpg" alt="menu_icon">
+    <div id="search_wrapper">
+        <div id="type_search">
+            <form action="result.php" method="post" id="form_wrapper">
+                <input id="input_book_search" type="search" name="input_book_search" placeholder="Search by Title, Author, or ISBN">
+                <div id="submit_icon_wrapper">
+                    <input id="search_submit_icon" type="image" src="Pic/search.png" alt="Submit">
                 </div>
-            </div>
-
-            <div class="leftside_link_wrapper">
-                <div id="logo_wrapper">
-                    <a href="index.php"><img src="Pic/logo.png"></a>
-                </div>
-                <div class="browse_wrapper">
-                    <a class="browse_link" href="browse.php">Browse</a>
-                </div>
-            </div>
-
-            <div id="rightside_link_wrapper">
-                <div id="account_wrapper">
-                    <a href=""><img src="Pic/account.png" alt="user account"></a>
-                </div>
-                <div id="cart_wrapper">
-                    <a href="myCart.php"><img src="Pic/cart.jpg" alt="book cart"></a>
-                </div>
-            </div>
+            </form>
         </div>
-
-        <div id="search_wrapper">
-            <div id="type_search">
-                <form action="result.php" method="post" id="form_wrapper">
-                    <input id="input_book_search" type="search" name="input_book_search" placeholder="Search by Title, Author, or ISBN">
-                    <div id="submit_icon_wrapper">
-                        <input id="search_submit_icon" type="image" src="Pic/search.png" alt="Submit">
-                    </div>
-                </form>
-            </div>
-            <div id="advanced_search">
-                <a href="">Advanced Search</a>
-            </div>
+        <div id="advanced_search">
+            <a href="">Advanced Search</a>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <script>
-        document.getElementById("side_menu_x_button").addEventListener("click", function(event) {
-            document.getElementById("side_menu_wrapper").style.left = "-100%";
-        });
-        
-        document.getElementById("menu_icon_wrapper").addEventListener("click", function(event) {
-            document.getElementById("side_menu_wrapper").style.left = "0";
-        })
-    </script>
+<script>
+    document.getElementById("account_icon").addEventListener("click", function(event) {
+        let display = document.getElementById("account_pop_up_box");
+        console.log(display.style.display);
+        if (display.style.display == "" || display.style.display == "none")
+            display.style.display = "block";
+        else
+            display.style.display = "none";
+    });
+    document.getElementById("side_menu_x_button").addEventListener("click", function(event) {
+        document.getElementById("side_menu_wrapper").style.left = "-100%";
+    });
+    
+    document.getElementById("menu_icon_wrapper").addEventListener("click", function(event) {
+        document.getElementById("side_menu_wrapper").style.left = "0";
+    })
+</script>
     ';
 ?>

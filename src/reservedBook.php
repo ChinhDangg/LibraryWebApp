@@ -76,11 +76,31 @@ if(isset($_POST['book_option_button'])) {
     <title>Reserved Books</title>
 </head>
 <body>
-    <?php include 'nav.php';?>
+    <?php include "nav.php" ?>
 
     <div id="result_header_wrapper">
         <h1 id="result_header">Reserved Book</h1>
     </div>
+
+    <?php
+        $user = $_COOKIE["username"];
+        $user = str_replace("_", ".", $user);
+        $sql = "SELECT ID, Available FROM Reserved_Books WHERE Email='$user'";
+        $result = mysqli_query($con, $sql); //all reserved books from current user
+        $id_str = ""; $av_str = "";
+        while($row = mysqli_fetch_assoc($result)) {
+            $id_str = $id_str . $row["ID"] . ",";
+            $av_str = $av_str . $row["Available"] . ",";
+        }
+        echo '
+            <script>
+                let reservedBookID = "'.$id_str.'".split(",");
+                let availability = "'.$av_str.'".split(",");
+            </script>
+        ';
+        if (mysqli_num_rows($result) < 1)
+            echo '<div><h3 id="no_reserved_book_header" style="margin-left: 50px;">No Reserved Books Currently</h3></div>';        
+    ?>
 
     <section id="reserved_book_section">
         <div id="all_reserved_book_wrapper">
@@ -127,22 +147,6 @@ if(isset($_POST['book_option_button'])) {
 
     <?php include 'footer.php';?>
 
-    <?php
-        $sql = "SELECT ID, Available FROM Reserved_Books WHERE Email='$user'";
-        $result = mysqli_query($con, $sql); //all reserved books from current user
-        $id_str = ""; $av_str = "";
-        while($row = mysqli_fetch_assoc($result)) {
-            $id_str = $id_str . $row["ID"] . ",";
-            $av_str = $av_str . $row["Available"] . ",";
-        }
-        echo '
-            <script>
-                let reservedBookID = "'.$id_str.'".split(",");
-                let availability = "'.$av_str.'".split(",");
-            </script>
-        ';        
-    ?>
-
     <script>
         let currentSelected = -1;
         function selectBook(element) {
@@ -183,8 +187,6 @@ if(isset($_POST['book_option_button'])) {
             }
             else
                 document.getElementById("book_option").style.display = "none";
-            console.log(currentSelected);
-            console.log(reservedBookID[currentSelected]);
             document.cookie = "selectedReservedBook="+reservedBookID[currentSelected]+"; max-age=3600; path=/";
         }
 

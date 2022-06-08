@@ -28,8 +28,6 @@ if (!empty($_POST["input_book_search"])) {
         $result = mysqli_query($con, $sql);
     }
 }
-// closing connection
-mysqli_close($con);
 ?>
 
 <!DOCTYPE html>
@@ -46,7 +44,7 @@ mysqli_close($con);
     <title>Book Search Result</title>
 </head>
 <body>
-    <?php include 'nav.php';?>
+    <?php include 'nav.php'; ?>
 
     <div id="result_header_wrapper">
         <h1 id="result_header">Results</h1>
@@ -89,6 +87,10 @@ mysqli_close($con);
         </div>
     </section>
 
-    <?php include 'footer.php' ?>
+    <?php 
+    include 'footer.php'; 
+        // closing connection
+        mysqli_close($con);
+    ?>
 </body>
 </html>

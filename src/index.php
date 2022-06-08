@@ -1,4 +1,10 @@
-<?php include 'loginCredential.php'; ?>
+<?php include 'loginCredential.php'; 
+$con = new mysqli('mysql_db', 'root', 'root', 'uni_book_db');
+if (!$con) {
+    echo "Fail";
+    die("Connection failed: " .mysqli_connect_errno());
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
