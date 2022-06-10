@@ -81,30 +81,3 @@ body {
         font-size: smaller;
     }
 }
-
-
-
-/* .addTo_cart_wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: row-reverse;
-}
-
-.addTo_cart_button {
-    display: block;
-    width: 100%;
-    margin-bottom: 20px;
-    color: white;
-    background-color: black;
-    padding: 15px 30px;
-    border-radius: 2px;
-    cursor: pointer;
-} 
-
-<div class="addTo_cart_wrapper">
-    <div>
-        <div class="addTo_cart_button">Add to Cart</div>
-    </div>
-</div>
-
-*/

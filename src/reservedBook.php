@@ -52,9 +52,9 @@ if(isset($_POST['book_option_button'])) {
             $isbn = $row["ISBN"];
             $user = $_COOKIE["username"];
             $user = str_replace("_", ".", $user);
-            $sql = "INSERT INTO Borrowed_Books (ISBN, Email, Due)
-            VALUES ($isbn, '$user', time()+3628800)"; //add new book to book list (6 weeks due)
-            $add_book_result = mysqli_query($con, $sql);
+            $due_time = time()+3628800;
+            $sql = "INSERT INTO Borrowed_Books (ISBN, Email, Due) VALUES ($isbn, '$user', $due_time)";
+            $add_book_result = mysqli_query($con, $sql); //add new book to book list (6 weeks due)
         }
         $sql = "DELETE FROM Reserved_Books WHERE ID=$book_ID";
         $remove_reserved_book_result = mysqli_query($con, $sql);
@@ -73,6 +73,7 @@ if(isset($_POST['book_option_button'])) {
     <link rel="stylesheet" type="text/css" href="css/nav.css">
     <link rel="stylesheet" type="text/css" href="css/footer.css">
     <link rel="stylesheet" type="text/css" href="css/reservedBook.css">
+    <link rel="stylesheet" type="text/css" href="css/reservedBookViewMore.css" media="none" id="reserved_view_more_style">
     <title>Reserved Books</title>
 </head>
 <body>
@@ -98,40 +99,53 @@ if(isset($_POST['book_option_button'])) {
                 let availability = "'.$av_str.'".split(",");
             </script>
         ';
-        if (mysqli_num_rows($result) < 1)
-            echo '<div><h3 id="no_reserved_book_header" style="margin-left: 50px;">No Reserved Books Currently</h3></div>';        
     ?>
-
     <section id="reserved_book_section">
+        <?php
+            if (mysqli_num_rows($result) < 1)
+                echo '<div><h3 id="no_reserved_book_header" style="margin-left: 50px;">No Reserved Books Currently</h3></div>';
+            else
+                echo '
+                <div id="view_book_info_icon_wrapper">
+                    <i id="view_book_info_icon" class="fa fa-list-ul fa-lg"></i>
+                </div>';        
+        ?>
+
         <div id="all_reserved_book_wrapper">
             <?php
                 $sql = "SELECT ISBN, Available, Due FROM Reserved_Books WHERE Email='$user'";
                 $result = mysqli_query($con, $sql); //all reserved books from current user
                 if (mysqli_num_rows($result) > 0) {
                     while($row = mysqli_fetch_assoc($result)) {
-                        if ($row["Available"] == 0) { //unavailable reserved book
-                            echo '
-                                <div class="reserved_book_wrapper" onclick="selectBook(this)">
-                                    <div class="reserved_book_img_wrapper">
-                                        <img src="DisplayBooks/display1.jpg" alt="reservedBook">
-                                    </div>
-                                    <div class="book_current_state">Unavailable</div>
-                                    <div class="book_isbn">'.$row["ISBN"].'</div>
-                                </div>
-                            ';
-                        }
+                        $reserved_book_availability = "";
+                        if ($row["Available"] == 0) //unavailable reserved book
+                            $reserved_book_availability = "Unavailable";
                         else { //available
                             $days = round(($row["Due"]-time())/60/60/24);
-                            echo '
-                                <div class="reserved_book_wrapper" onclick="selectBook(this)">
-                                    <div class="reserved_book_img_wrapper">
-                                        <img src="DisplayBooks/display1.jpg" alt="reservedBook">
-                                    </div>
-                                    <div class="book_current_state">Available - '.$days.' days</div>
-                                    <div class="book_isbn">'.$row["ISBN"].'</div>
-                                </div>
-                            ';
+                            $reserved_book_availability = "Available - ".$days." days";
                         }
+                        echo '
+                            <div class="reserved_book_wrapper" onclick="selectBook(this)">
+                                <div class="reserved_book_img_wrapper">
+                                    <img src="DisplayBooks/display1.jpg" alt="reservedBook">
+                                </div>
+                                <div class="availability_and_info_wrapper">
+                                    <div class="book_current_state">'.$reserved_book_availability.'</div>
+                        ';
+                            $isbn = $row["ISBN"];
+                            $sql = "SELECT Title, Author, ISBN FROM Books WHERE ISBN=$isbn";
+                            $book_info_result = mysqli_query($con, $sql);
+                            $book_info_row = mysqli_fetch_array($book_info_result);
+                                    echo '
+                                        <div class="book_info_wrapper" style="display: none">
+                                            <h3>'.$book_info_row["Title"].'</h3>
+                                            <div>by '.$book_info_row["Author"].'</div>
+                                            <div>ISBN: '.$book_info_row["ISBN"].'</div>
+                                        </div>
+                                    ';
+                         echo '</div>
+                            </div>
+                        ';
                     }
                 }
             ?>
@@ -142,7 +156,6 @@ if(isset($_POST['book_option_button'])) {
                 <input type="submit" name="book_option_button" value="Remove" id="book_option"/>
             </form>
         </div>
-
     </section>  
 
     <?php include 'footer.php';?>
@@ -157,15 +170,13 @@ if(isset($_POST['book_option_button'])) {
                         currentSelected = j;
                         which[j].style.backgroundColor = "rgb(120,120,120)";
                         document.getElementsByClassName("reserved_book_img_wrapper")[j].style.opacity = "0.5";
-                        document.getElementsByClassName("book_current_state")[j].style.color = "white";
-                        document.getElementsByClassName("book_isbn")[j].style.color = "white";
+                        document.getElementsByClassName("reserved_book_wrapper")[j].style.color = "white";
                     }
                     else { //unselected
                         currentSelected = -1;
                         which[j].style.backgroundColor = "";
                         document.getElementsByClassName("reserved_book_img_wrapper")[j].style.opacity = "1.0";
-                        document.getElementsByClassName("book_current_state")[j].style.color = "black";
-                        document.getElementsByClassName("book_isbn")[j].style.color = "black";
+                        document.getElementsByClassName("reserved_book_wrapper")[j].style.color = "black";
                         break;
                     }
                 }
@@ -173,8 +184,7 @@ if(isset($_POST['book_option_button'])) {
                     if (which[j].style.backgroundColor != "") {
                         which[j].style.backgroundColor = "";
                         document.getElementsByClassName("reserved_book_img_wrapper")[j].style.opacity = "1.0";
-                        document.getElementsByClassName("book_current_state")[j].style.color = "black";
-                        document.getElementsByClassName("book_isbn")[j].style.color = "black";
+                        document.getElementsByClassName("reserved_book_wrapper")[j].style.color = "black";
                     }
                 }
             }
@@ -190,6 +200,14 @@ if(isset($_POST['book_option_button'])) {
             document.cookie = "selectedReservedBook="+reservedBookID[currentSelected]+"; max-age=3600; path=/";
         }
 
+        document.getElementById("view_book_info_icon").addEventListener("click", function(event) {
+            let reserved_view_more = document.getElementById("reserved_view_more_style");
+            if (reserved_view_more.media == "none")
+                reserved_view_more.media = "";
+            else
+                reserved_view_more.media = "none";
+        });
+
         document.getElementById("book_option").addEventListener("click", function(event) {
             reservedBookID.splice(currentSelected, 1);
             availability.splice(currentSelected, 1);
@@ -197,7 +215,7 @@ if(isset($_POST['book_option_button'])) {
         });
 
         if (window.history.replaceState ) {
-            window.history.replaceState( null, null, window.location.href );
+            window.history.replaceState(null, null, window.location.href );
         }
     </script>
 

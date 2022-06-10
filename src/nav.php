@@ -43,7 +43,7 @@
                     <div id="triangle"></div>
                     <div id="message">
                         <a href="reservedBook.php"><i class="fa fa-cog fa-lg"></i>View Account</a>
-                        <a href="reservedBook.php"><i class="fa fa-book fa-lg"></i>My Books</a>
+                        <a href="myBook.php"><i class="fa fa-book fa-lg"></i>My Books</a>
                         <a href="reservedBook.php" id="reserved_book_link">
                             <i class="fa fa-clock-o fa-lg"></i>
                             <div id="reserved_book_link_text">Reserved Books</div>
@@ -59,9 +59,11 @@
                     <i class="fa fa-shopping-basket fa-2x"></i>
                     <div id="cart_num_item_wrapper">';
                         $user = $_COOKIE["username"];
-                        $num_cart_book = count(explode(",", $_COOKIE[$user]));
-                        if (!empty($_COOKIE[$user]) && $num_cart_book > 0) 
-                            echo $num_cart_book;
+                        if (!empty($_COOKIE[$user])) {
+                            $num_cart_book = count(explode(",", $_COOKIE[$user]));
+                            if ($num_cart_book > 0)
+                                echo $num_cart_book;
+                        }
               echo '</div>
                 </a>
             </div>
@@ -86,14 +88,13 @@
 <script>
     document.getElementById("account_icon").addEventListener("click", function(event) {
         let display = document.getElementById("account_pop_up_box");
-        console.log(display.style.display);
         if (display.style.display == "" || display.style.display == "none")
             display.style.display = "block";
         else
             display.style.display = "none";
     });
     document.getElementById("side_menu_x_button").addEventListener("click", function(event) {
-        document.getElementById("side_menu_wrapper").style.left = "-100%";
+        document.getElementById("side_menu_wrapper").style.left = "-200%";
     });
     
     document.getElementById("menu_icon_wrapper").addEventListener("click", function(event) {

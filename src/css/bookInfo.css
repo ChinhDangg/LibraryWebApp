@@ -73,6 +73,8 @@ body {
     }
     #book_img_wrapper img {
         padding: 0 10px;
+        width: 50%;
+        margin: 0 auto;
     }
     #book_text_info_wrapper {
         padding: 0 10px;
@@ -83,5 +85,11 @@ body {
     }
     #book_available_option_wrapper {
         margin-top: 50px;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    #book_img_wrapper img {
+        width: 100%;
     }
 }

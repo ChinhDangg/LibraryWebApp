@@ -19,6 +19,16 @@ body {
     height: 100%;
 }
 
+#view_book_info_icon_wrapper {
+    display: flex;
+    justify-content: end;
+}
+#view_book_info_icon_wrapper i {
+    cursor: pointer;
+    margin-right: 100px;
+    margin-bottom: 20px;
+}
+
 #all_reserved_book_wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -44,7 +54,7 @@ body {
     height: 250px;
 }
 
-.book_current_state, .book_isbn {
+.book_current_state {
     text-align: center;
 }
 
@@ -70,9 +80,11 @@ body {
     display: none;
 }
 
-
-
+/* Small screen  */
 @media screen and (max-width: 768px) {
+    #view_book_info_icon_wrapper i {
+        margin-right: 10px;
+    }
     .reserved_book_wrapper {
         margin-bottom: 40px;
     }
@@ -80,5 +92,3 @@ body {
         margin-left: 10px !important;
     }
 }
-
-
