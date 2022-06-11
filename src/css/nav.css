@@ -242,7 +242,8 @@ a {
 
 #menu_link_wrapper {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 #menu_link_wrapper i {
@@ -252,6 +253,12 @@ a {
 
 #menu_link_wrapper a {
     margin-left: 10px;
+}
+
+.side_browse_wrapper {
+    width: fit-content;
+    display: flex;
+    align-items: center; 
 }
 
 
@@ -269,7 +276,7 @@ a {
     #menu_wrapper {
         display: block;
     }
-    .browse_wrapper:last-child {
+    .browse_wrapper:not(:first-child) {
         display: none;
     }
     #logo_wrapper {

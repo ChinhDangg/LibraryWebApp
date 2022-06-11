@@ -8,9 +8,6 @@ if (!$con) {
 $sql = "SELECT DISTINCT Genre FROM Books";
 $result = mysqli_query($con, $sql);
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

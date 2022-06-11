@@ -13,9 +13,18 @@
         <div><i class="fa fa-times fa-lg" id="side_menu_x_button" aria-hidden="true"></i></div>
     </div>
     <div id="menu_link_wrapper">
-        <i class="fa fa-globe" aria-hidden="true"></i>
-        <a class="browse_link" href="browse.php">Browse</a>
-    </div>
+        <div class="side_browse_wrapper">
+            <i class="fa fa-globe" aria-hidden="true"></i>
+            <a class="browse_link" href="browse.php">Browse</a>
+        </div>';
+if ($_COOKIE["user"] == "Staffs")
+    echo '
+        <div class="side_browse_wrapper" style="margin-top: 10px;">
+            <i class="fa fa-globe" aria-hidden="true"></i>
+            <a class="browse_link" href="manageBooks.php">Manage Books</a>
+        </div>
+    ';
+echo'</div>
 </div>
 
 <nav>
@@ -32,8 +41,14 @@
             </div>
             <div class="browse_wrapper">
                 <a class="browse_link" href="browse.php">Browse</a>
+            </div>';
+    if ($_COOKIE["user"] == "Staffs")
+        echo '
+            <div class="browse_wrapper">
+                <a class="browse_link" href="manageBooks.php">Manage Books</a>
             </div>
-        </div>
+        ';
+  echo '</div>
 
         <div id="rightside_link_wrapper">
             <div id="account_wrapper">
