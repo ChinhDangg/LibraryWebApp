@@ -132,9 +132,20 @@ body {
     }
 }
 
-/* Small screen */
 @media screen and (max-width: 530px) {
     .result_info_wrapper h3, .result_info_wrapper div {
         font-size: smaller;
+    }
+}
+
+@media screen and (max-width: 395px) {
+    .result_info_wrapper {
+        margin-bottom: 0;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .cart_book_time {
+        margin-top: 0;
     }
 }

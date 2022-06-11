@@ -35,8 +35,8 @@ body {
 }
 
 .my_book_wrapper {
-    margin-left: 10px;
     margin-bottom: 30px;
+    margin-left: 10px;
 }
 
 a:hover .my_book_img_wrapper {

@@ -54,11 +54,11 @@ $result = mysqli_query($con, $sql); //all reserved books from current user
                                 </div>
                                 <div class="book_info_wrapper">
                                     <h3>'.$book_row["Title"].'</h3>
-                                    <div>'.$book_row["Author"].'</div>
+                                    <div>by '.$book_row["Author"].'</div>
                                     <div>ISBN: '.$isbn.'</div>
                                     <div>'.$day_remaining.' days left</div>
                                 </div>
-                            <a>
+                            </a>
                         </div>
                     ';
                 }

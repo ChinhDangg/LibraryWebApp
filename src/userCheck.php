@@ -1,7 +1,3 @@
-<?php
-    setcookie("username", "", time() + (86400 * 0), "/"); // 86400 = 1 day
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -60,6 +60,12 @@ body {
 }
 
 /* Small screen */
+@media screen and (max-width: 1050px) {
+    #book_info_wrapper {
+        margin: 0 10px;
+    }
+}
+
 @media screen and (max-width: 768px) {
     #book_info_wrapper {
         margin: 0 0;

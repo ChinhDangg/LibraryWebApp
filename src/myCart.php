@@ -6,13 +6,47 @@ if (!$con) {
     die("Connection failed: " .mysqli_connect_errno());
 }
 
-// echo $_COOKIE["username"]."<br>";
-// $t = $_COOKIE["username"];
-// echo $_COOKIE[$t];
+// unset($_COOKIE["chinh@example_com"]);
+// setcookie("chinh@example_com", null, -1, '/');
 
-// $user = $_COOKIE["username"];
-// unset($_COOKIE[$user]); 
-// setcookie($user, null, -1, '/');  
+// foreach ($_COOKIE as $key=>$val)
+//   {
+//     echo $key.' is '.$val."<br>\n";
+//   }
+
+if(isset($_POST['checkout_button'])) {
+    $user = $_COOKIE["username"];
+    if (isset($_COOKIE[$user])) {
+        $book_result_list = explode(",", $_COOKIE[$user]);
+        $temp_book_list = $book_result_list;
+        for ($books = 0; $books < count($book_result_list); $books++) {
+            $isbn = $book_result_list[$books];
+            $sql = "SELECT Stock FROM Books Where ISBN='$isbn'";
+            $stock_result = mysqli_query($con, $sql);
+            $stock_result_row = mysqli_fetch_array($stock_result);
+            if ($stock_result_row["Stock"] > 0) { //check stock available again
+                $user = str_replace("_", ".", $user);
+                $due_time = time()+3628800;
+                $sql = "INSERT INTO Borrowed_Books (ISBN, Email, Due) VALUES ($isbn, '$user', $due_time)";
+                $add_book_result = mysqli_query($con, $sql); //add new book to book list (6 weeks due)
+                unset($temp_book_list[$books]);
+
+                $update_stock = $stock_result_row["Stock"] - 1;
+                $sql = "UPDATE Books SET Stock = $update_stock WHERE ISBN=$isbn";
+                $update_stock_result = mysqli_query($con, $sql); //update new stock
+            }
+        }
+    }
+    $user = str_replace(".", "_", $user);
+    if (empty($temp_book_list)) {
+        unset($_COOKIE[$user]);
+        setcookie($user, "", -1, "/");
+    }
+    else {
+        $new_book_list = implode(",", $temp_book_list);
+        setcookie($user, $new_book_list, time() + (86400), "/");
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +71,7 @@ if (!$con) {
 
     <h2 id="cart_empty_alert_display" style="margin: 0 0 0 100px">
         <?php 
+        $user = str_replace(".", "_", $user);
         $user = $_COOKIE["username"];
         if (!isset($_COOKIE[$user]) || $_COOKIE[$user] == "") 
             echo 'Your Cart is Empty. Go browse some books' 
@@ -47,6 +82,7 @@ if (!$con) {
         <div id="result_checkout_wrapper">
             <div id="all_results_wrapper">
                 <?php 
+                    $user = str_replace(".", "_", $user);
                     if (isset($_COOKIE[$user]) && $_COOKIE[$user] != "") {
                         $book_result_list = explode(",", $_COOKIE[$user]);
                         for ($books = 0; $books < count($book_result_list); $books++) {
@@ -80,20 +116,21 @@ if (!$con) {
                                 unset($book_result_list[$books]);
                             }
                         }
-                        // closing connection
-                        mysqli_close($con);
                     }
                 ?>
 
             </div>
             <?php 
+                $user = str_replace(".", "_", $user);
                 if (isset($_COOKIE[$user]) && $_COOKIE[$user] != "")
                     echo '
                         <div id="cart_checkout_wrapper">
                             <div>
                                 <div id="cart_checkout_total_wrapper"><h3 id="cart_checkout_total">Total: '.count($book_result_list).'</h3></div>
                                 <div id="cart_checkout_button_wrapper">
-                                    <div id="cart_checkout_button">Checkout</div>
+                                    <form method="post">
+                                        <input type="submit" name="checkout_button" value="Checkout" id="cart_checkout_button"/>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -102,31 +139,51 @@ if (!$con) {
         </div>  
     </section> 
 
-    <?php include 'footer.php';?>
+    <!-- <?php //include 'footer.php';?> -->
         
     <?php
-        if (isset($_COOKIE[$user])) {
+        $user = str_replace(".", "_", $user);
+        if (isset($_COOKIE[$user]) && !empty($_COOKIE[$user])) {
             echo '
                 <script>
                     console.log(document.cookie);                   
                     function removeBook(ISBN) {
-                        let stored_book = localStorage.getItem("'.$user.'").split(",");
+                        let stored_book = getCookie("'.$user.'").split(",");
                         for (let j = 0; j < stored_book.length; j++) {
                             if (stored_book[j] == ISBN) {
                                 document.getElementsByClassName("result_row")[j].remove();
                                 stored_book.splice(j, 1);
-                                localStorage.setItem("'.$user.'", stored_book);
-                                document.cookie = "'.$user.'="+localStorage.getItem("'.$user.'")+"; max-age=864000; path=/";
+                                let new_stored_book = stored_book.toString();
+                                document.cookie = "'.$user.'="+new_stored_book+"; max-age=864000; path=/";
                                 document.getElementById("cart_checkout_total").innerText = "Total: "+stored_book.length;
                                 if (stored_book.length == 0) {
                                     document.getElementById("cart_checkout_wrapper").remove();
                                     document.getElementById("cart_empty_alert_display").innerText = "Your Cart is Empty. Go browse some books";
                                     document.getElementById("cart_num_item_wrapper").innerHTML = "";
                                 }
-                                else document.getElementById("cart_num_item_wrapper").innerHTML = localStorage.getItem("'.$user.'").split(",").length; //update cart number icon 
+                                else
+                                    document.getElementById("cart_num_item_wrapper").innerHTML = stored_book.length; //update cart number icon 
                                 break;
                             }
                         }
+                    }
+
+                    function getCookie(cname) {
+                        let name = cname + "=";
+                        let decodedCookie = decodeURIComponent(document.cookie);
+                        let ca = decodedCookie.split(";");
+                        for(let i = 0; i <ca.length; i++) {
+                            let c = ca[i];
+                            while (c.charAt(0) == " ")
+                                c = c.substring(1);
+                            if (c.indexOf(name) == 0)
+                                return c.substring(name.length, c.length);
+                        }
+                        return "";
+                    }
+
+                    if (window.history.replaceState ) {
+                        window.history.replaceState(null, null, window.location.href );
                     }
 
                 </script>

@@ -13,7 +13,7 @@ if ($_GET['user'] == 'Students' || $_GET['user'] == 'Staffs') {
 
     $input_email = $_POST["input_email"];
     $input_password = $_POST["input_password"];
-    $sql = "SELECT Email FROM $user WHERE Email='$input_email' AND Pass='$input_password'";
+    $sql = "SELECT Email FROM $user WHERE BINARY Email='$input_email' AND BINARY Pass='$input_password'";
     $result = mysqli_query($con, $sql);
 
     if (mysqli_num_rows($result) > 0) {

@@ -6,12 +6,29 @@ if ($_GET['isbn'] !== "") {
         echo "Fail";
         die("Connection failed: " .mysqli_connect_errno());
     }
+    
     $isbn = mysqli_real_escape_string($con, $_GET['isbn']);
+
+    //update available books to reservers and update the stock again
+    $sql = "SELECT Stock FROM Books WHERE ISBN=$isbn";
+    $check_stock = mysqli_fetch_array(mysqli_query($con, $sql))["Stock"];
+    if ($check_stock > 0) { //if stock available now 
+        $due_time = time() + 1209600; //+ 2 weeks due date to checkout
+        $sql = "UPDATE Reserved_Books SET Available=1, Due=$due_time WHERE ISBN=$isbn AND Available<>1 LIMIT $check_stock";
+        $give_bookTo_firstuser = mysqli_query($con, $sql); //for each stock available, give to first few people
+    
+        $sql = "SELECT ID FROM Reserved_Books WHERE ISBN=$isbn AND Available=1 AND Due=$due_time";
+        $update_stock = $check_stock - mysqli_num_rows(mysqli_query($con, $sql));
+        $sql = "UPDATE Books SET Stock = $update_stock WHERE ISBN=$isbn";
+        $update_stock_result = mysqli_query($con, $sql); //update new stock
+    }
+
     $sql = "SELECT Title, Author, ISBN, Genre, Stock, Published, Summary, Publisher FROM Books WHERE ISBN='$isbn'";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_array($result);
     if (mysqli_num_rows($result) < 1)
         header('Location: browse.php');
+
 }
 else {
     header('Location: index.php');
@@ -98,20 +115,26 @@ else {
             echo '
                 <script>
                     document.getElementById("book_option_button").addEventListener("click", function(event) {
-                        let books = [];
-                        if (localStorage.getItem("'.$user.'")) {
-                            if (!localStorage.getItem("'.$user.'").includes("'.$row["ISBN"].'")) {
-                                books.push(localStorage.getItem("'.$user.'"), "'.$row["ISBN"].'");
-                                localStorage.setItem("'.$user.'", books);
-                            }
-                        }
-                        else {
-                            books.push("'.$row["ISBN"].'");
-                            localStorage.setItem("'.$user.'", books);
-                        }
-                        document.cookie = "'.$user.'="+localStorage.getItem("'.$user.'")+"; max-age=864000; path=/";
-                        document.getElementById("cart_num_item_wrapper").innerHTML = localStorage.getItem("'.$user.'").split(",").length; //update cart number icon                    
+                        let books = getCookie("'.$user.'");
+                        books = (books == "") ? "'.$row["ISBN"].'" : (books + ","+"'.$row["ISBN"].'");
+                        
+                        document.cookie = "'.$user.'="+books+"; max-age=864000; path=/";
+                        document.getElementById("cart_num_item_wrapper").innerHTML = books.split(",").length; //update cart number icon                    
                     });
+
+                    function getCookie(cname) {
+                        let name = cname + "=";
+                        let decodedCookie = decodeURIComponent(document.cookie);
+                        let ca = decodedCookie.split(";");
+                        for(let i = 0; i <ca.length; i++) {
+                            let c = ca[i];
+                            while (c.charAt(0) == " ")
+                                c = c.substring(1);
+                            if (c.indexOf(name) == 0)
+                                return c.substring(name.length, c.length);
+                        }
+                        return "";
+                    }
                 </script>
             ';
         }

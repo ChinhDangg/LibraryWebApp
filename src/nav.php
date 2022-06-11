@@ -42,15 +42,15 @@
                 <div id="account_pop_up_box">
                     <div id="triangle"></div>
                     <div id="message">
-                        <a href="reservedBook.php"><i class="fa fa-cog fa-lg"></i>View Account</a>
+                        <a href="viewAccount.php"><i class="fa fa-cog fa-lg"></i>View Account</a>
                         <a href="myBook.php"><i class="fa fa-book fa-lg"></i>My Books</a>
                         <a href="reservedBook.php" id="reserved_book_link">
                             <i class="fa fa-clock-o fa-lg"></i>
                             <div id="reserved_book_link_text">Reserved Books</div>
                             <div class="reserved_book_count_icon">'.$reserved_book_count.'</div>
                         </a>
-                        <a href="reservedBook.php"><i class="fa fa-unlock-alt fa-lg"></i>Change Password</a>
-                        <a href="reservedBook.php"><i class="fa fa-sign-out fa-lg"></i>Log-out</a>
+                        <a href="changePassword.php"><i class="fa fa-unlock-alt fa-lg"></i>Change Password</a>
+                        <a href="logout.php"><i class="fa fa-sign-out fa-lg"></i>Log-out</a>
                     </div>
                 </div>
             </div>
@@ -59,6 +59,7 @@
                     <i class="fa fa-shopping-basket fa-2x"></i>
                     <div id="cart_num_item_wrapper">';
                         $user = $_COOKIE["username"];
+                        $user = str_replace(".", "_", $user);
                         if (!empty($_COOKIE[$user])) {
                             $num_cart_book = count(explode(",", $_COOKIE[$user]));
                             if ($num_cart_book > 0)
