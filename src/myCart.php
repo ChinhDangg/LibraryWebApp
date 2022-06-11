@@ -71,10 +71,10 @@ if(isset($_POST['checkout_button'])) {
 
     <h2 id="cart_empty_alert_display" style="margin: 0 0 0 100px">
         <?php 
-        $user = str_replace(".", "_", $user);
-        $user = $_COOKIE["username"];
-        if (!isset($_COOKIE[$user]) || $_COOKIE[$user] == "") 
-            echo 'Your Cart is Empty. Go browse some books' 
+            $user = $_COOKIE["username"];
+            $user = str_replace(".", "_", $user);
+            if (!isset($_COOKIE[$user]) || $_COOKIE[$user] == "") 
+                echo 'Your Cart is Empty. Go browse some books' 
         ?>
     </h2> 
 

@@ -7,7 +7,7 @@ if (!$con) {
 }
 
 $user = $_COOKIE["user"];
-if(isset($_POST['previous_password_input'])) {
+if(isset($_POST['confirm_previous_pass_button'])) {
     $input_pass = $_POST['previous_password_input'];
     $sql = "SELECT Username FROM $user WHERE BINARY Pass='$input_pass'";
     $result = mysqli_query($con, $sql);
@@ -20,7 +20,7 @@ if(isset($_POST['previous_password_input'])) {
     header ("Location: changePassword.php");
 }
 
-if(isset($_POST['new_password_input']) && isset($_POST['re_new_password_input'])) {
+if(isset($_POST['confirm_change_pass_button'])) {
     $new_pass = $_POST["new_password_input"];
     $re_new_pass = $_POST["re_new_password_input"];
     if ($new_pass == $re_new_pass) {
@@ -72,7 +72,7 @@ if(isset($_POST['new_password_input']) && isset($_POST['re_new_password_input'])
                         }
                       echo' <input class="change_pass_input" type="password" name="previous_password_input" placeholder="Enter Previous Password" required autofocus>
                             <div id="confirm_change_pass_wrapper">
-                                <input type="submit" name="confirm_change_pass_button" value="Confirm" id="confirm_change_pass_button"/>
+                                <input type="submit" name="confirm_previous_pass_button" value="Confirm" id="confirm_change_pass_button"/>
                             </div>
                         ';
                     }

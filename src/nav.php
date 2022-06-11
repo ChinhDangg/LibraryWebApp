@@ -1,7 +1,7 @@
 <?php 
-    $user = $_COOKIE["username"];
-    $user = str_replace("_", ".", $user);
-    $sql = "SELECT ISBN FROM Reserved_Books WHERE Email='$user'";
+    $username = $_COOKIE["username"];
+    $username = str_replace("_", ".", $username);
+    $sql = "SELECT ISBN FROM Reserved_Books WHERE Email='$username'";
     $reserved_book_count_result = mysqli_query($con, $sql); //all reserved books from current user
     $reserved_book_count = (mysqli_num_rows($reserved_book_count_result) > 0) ? mysqli_num_rows($reserved_book_count_result) : "";
     
@@ -58,10 +58,10 @@
                 <a href="myCart.php" id="cart_link_wrapper">
                     <i class="fa fa-shopping-basket fa-2x"></i>
                     <div id="cart_num_item_wrapper">';
-                        $user = $_COOKIE["username"];
-                        $user = str_replace(".", "_", $user);
-                        if (!empty($_COOKIE[$user])) {
-                            $num_cart_book = count(explode(",", $_COOKIE[$user]));
+                        $username = $_COOKIE["username"];
+                        $username = str_replace(".", "_", $username);
+                        if (!empty($_COOKIE[$username])) {
+                            $num_cart_book = count(explode(",", $_COOKIE[$username]));
                             if ($num_cart_book > 0)
                                 echo $num_cart_book;
                         }

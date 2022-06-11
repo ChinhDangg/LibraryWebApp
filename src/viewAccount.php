@@ -7,17 +7,19 @@ if (!$con) {
 }
 
 $user = $_COOKIE["user"];
-if(isset($_POST['previous_password_input'])) {
-    $input_pass = $_POST['previous_password_input'];
-    $sql = "SELECT Username FROM $user WHERE BINARY Pass='$input_pass'";
-    $result = mysqli_query($con, $sql);
-    if (mysqli_num_rows($result) > 0) { //pass is correct
-        $row = mysqli_fetch_array($result);
-        setcookie("passCheck", "correct", time() + 300, "/");
-    }
-    else
-        setcookie("passCheck", "incorrect", time() + 1, "/");
-    header ("Location: changePassword.php");
+$email = $_COOKIE["username"];
+$email = str_replace("_", ".", $email);
+$sql = "SELECT Email, Username FROM $user WHERE Email='$email'";
+$result = mysqli_query($con, $sql);
+$row = mysqli_fetch_array($result);
+
+if(isset($_POST['confirm_change_button'])) {
+    $first_name = $_POST["first_name_input"];
+    $last_name = $_POST["last_name_input"];
+    $new_name = $first_name." ".$last_name;
+    $sql = "UPDATE $user SET Username='$new_name' WHERE Email='$email'";
+    $change_name_result = mysqli_query($con, $sql);
+    header ("Location: viewAccount.php");
 }
 ?>
 
@@ -46,10 +48,10 @@ if(isset($_POST['previous_password_input'])) {
             <div><a href="changePassword.php">Change Password</a></div>
             <div id="personal_detail_wrapper">
                 <div><h3>Personal Details:</h3></div>
-                    <div id="personal_details">
+                    <form id="personal_details" method="post">
                         <div id="current_username_wrapper">
                             <div>Current Username:</div>
-                            <div>Chinh Dang</div>
+                            <div><?php echo $row["Username"];?></div>
                         </div>
                         <div id="first_name_wrapper">
                             <label for="first_name_input">First Name:</label>
@@ -65,12 +67,12 @@ if(isset($_POST['previous_password_input'])) {
                         </div>
                         <div id="email_wrapper">
                             <div>Emails:</div>
-                            <input type="text" value="chinh@example.com" disabled id="email_input">
+                            <input type="text" value=<?php echo '"'.$row["Email"].'"'; ?> disabled id="email_input">
                         </div>
                         <div id="confirm_button_wrapper">
                             <input type="submit" name="confirm_change_button" value="Confirm" id="confirm_change_button"/>
                         </div>
-                    </div>
+                    </form>
             </div>
         </div>
     </section>  
