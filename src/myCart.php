@@ -6,9 +6,6 @@ if (!$con) {
     die("Connection failed: " .mysqli_connect_errno());
 }
 
-// unset($_COOKIE["chinh@example_com"]);
-// setcookie("chinh@example_com", null, -1, '/');
-
 // foreach ($_COOKIE as $key=>$val)
 //   {
 //     echo $key.' is '.$val."<br>\n";

@@ -86,16 +86,16 @@ echo'</div>
         </div>
     </div>
 
-    <div id="search_wrapper">
-        <div id="type_search">
-            <form action="result.php" method="post" id="form_wrapper">
-                <input id="input_book_search" type="search" name="input_book_search" placeholder="Search by Title, Author, or ISBN">
-                <div id="submit_icon_wrapper">
-                    <input id="search_submit_icon" type="image" src="Pic/search.png" alt="Submit">
+    <div class="search_wrapper">
+        <div class="type_search">
+            <form action="result.php" method="post" class="form_search_wrapper">
+                <input class="input_book_search" type="search" name="input_book_search" placeholder="Search by Title, Author, or ISBN">
+                <div class="submit_icon_wrapper">
+                    <input class="search_submit_icon" type="image" src="Pic/search.png" alt="Submit">
                 </div>
             </form>
         </div>
-        <div id="advanced_search">
+        <div class="advanced_search">
             <a href="">Advanced Search</a>
         </div>
     </div>

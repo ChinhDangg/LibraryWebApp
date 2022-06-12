@@ -20,8 +20,8 @@ if ($_GET['user'] == 'Students' || $_GET['user'] == 'Staffs') {
         $row = mysqli_fetch_array($result);
         $username = $row["Email"];
         $username = str_replace('.', '_', $username);
-        setcookie("username", $username, time() + (3600), "/"); // 1h login
-        setcookie("user", $user, time() + (3600), "/");
+        setcookie("username", $username, time() + (7200), "/"); // 2h login
+        setcookie("user", $user, time() + (7200), "/");
         session_unset();
         session_destroy();
         header("Location: index.php");

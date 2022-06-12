@@ -128,7 +128,6 @@ a {
     width: 18px;
     margin-right: 10px;
 }
-/* #6fbced */
 
 /* reserved book count icon */
 #reserved_book_link {
@@ -156,7 +155,8 @@ a {
     height: 50px;
 }
 
-#search_wrapper {
+/*Search bar*/
+.search_wrapper {
     display: flex;
     flex-direction: column;
     max-width: 500px;
@@ -167,34 +167,34 @@ a {
     margin-top: 10px;
 }
 
-#type_search {
+.type_search {
     width: 100%;
     height: 100%;
 }
 
-#form_wrapper {
+.form_search_wrapper {
     display: flex;
     justify-content: center;
     width: 100%;
     height: 100%;
 }
 
-#advanced_search {
+.advanced_search {
     display: flex;
     flex-direction: row-reverse;
 }
 
-#advanced_search a:hover {
+.advanced_search a:hover {
     text-decoration: underline;
 }
 
-#input_book_search {
+.input_book_search {
     border: 1px solid black;
     border-radius: 0 0;
     width: 100%;
 }
 
-#submit_icon_wrapper {
+.submit_icon_wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -204,7 +204,7 @@ a {
     cursor: pointer;
 }
 
-#search_submit_icon {
+.search_submit_icon {
     width: 30px;
     height: 30px;
 }
@@ -264,7 +264,7 @@ a {
 
 /* Small screen navigation */
 @media screen and (max-width: 768px) { 
-    #search_wrapper {
+    .search_wrapper {
        padding: 0 10px;
     }
     .leftside_link_wrapper > div {

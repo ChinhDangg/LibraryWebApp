@@ -1,12 +1,12 @@
 <?php
 include 'loginCredential.php';
+if ($_COOKIE["user"] != "Staffs")
+    header ("Location: index.php");
 $con = new mysqli('mysql_db', 'root', 'root', 'uni_book_db');
 if (!$con) {
     echo "Fail";
     die("Connection failed: " .mysqli_connect_errno());
 }
-$sql = "SELECT DISTINCT Genre FROM Books";
-$result = mysqli_query($con, $sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,11 +29,11 @@ $result = mysqli_query($con, $sql);
     </div>
     
     <section id="manage_book_section">
-        <div id="manage_book_wrapper">
-            <div><a href="">Add new Book</a></div>
-            <div><a href="">Remove Books</a></div>
-            <div><a href="">Manage Borrowed Books</a></div>
-            <div><a href="">Manage Reserved Books</a></div>
+        <div id="manage_book_wrapper" method="post">
+            <div><a href="addNewBook.php">Add new Book</a></div>
+            <div><a href="removeBooks.php">Remove Books</a></div>
+            <div><a href="addNewBook.php">Manage Borrowed Books</a></div>
+            <div><a href="addNewBook.php">Manage Reserved Books</a></div>
         </div>
     </section>
 
