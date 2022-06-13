@@ -12,7 +12,7 @@ if ($_GET['isbn'] !== "") {
     //update available books to reservers and update the stock again
     $sql = "SELECT Stock FROM Books WHERE ISBN=$isbn";
     $check_stock = mysqli_fetch_array(mysqli_query($con, $sql))["Stock"];
-    if ($check_stock > 0) { //if stock available now 
+    if ($check_stock > 0) { //if stock available now
         $due_time = time() + 1209600; //+ 2 weeks due date to checkout
         $sql = "UPDATE Reserved_Books SET Available=1, Due=$due_time WHERE ISBN=$isbn AND Available<>1 LIMIT $check_stock";
         $give_bookTo_firstuser = mysqli_query($con, $sql); //for each stock available, give to first few people

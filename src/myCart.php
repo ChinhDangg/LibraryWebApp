@@ -142,8 +142,7 @@ if(isset($_POST['checkout_button'])) {
         $user = str_replace(".", "_", $user);
         if (isset($_COOKIE[$user]) && !empty($_COOKIE[$user])) {
             echo '
-                <script>
-                    console.log(document.cookie);                   
+                <script>                  
                     function removeBook(ISBN) {
                         let stored_book = getCookie("'.$user.'").split(",");
                         for (let j = 0; j < stored_book.length; j++) {

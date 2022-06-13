@@ -89,7 +89,7 @@ echo'</div>
     <div class="search_wrapper">
         <div class="type_search">
             <form action="result.php" method="post" class="form_search_wrapper">
-                <input class="input_book_search" type="search" name="input_book_search" placeholder="Search by Title, Author, or ISBN">
+                <input class="input_book_search" type="search" name="input_book_search" placeholder="Search by Title, Author, or ISBN" pattern=".{3,}" required title="3 characters minimum">
                 <div class="submit_icon_wrapper">
                     <input class="search_submit_icon" type="image" src="Pic/search.png" alt="Submit">
                 </div>

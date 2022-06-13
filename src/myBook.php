@@ -46,6 +46,7 @@ $result = mysqli_query($con, $sql); //all reserved books from current user
                     $sql = "SELECT Title, Author FROM Books WHERE ISBN=$isbn";
                     $book_result = mysqli_query($con, $sql);
                     $book_row = mysqli_fetch_array($book_result);
+                    // need to display overdue date
                     echo '
                         <div class="my_book_wrapper">
                             <a href="bookInfo.php?isbn='.$isbn.'">

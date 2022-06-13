@@ -6,6 +6,8 @@ if (!$con) {
     die("Connection failed: " .mysqli_connect_errno());
 }
 
+//to do: calculate the reserve date available time for everyone instead of just the first one
+
 $user = $_COOKIE["username"];
 $user = str_replace("_", ".", $user);
 $sql = "SELECT ISBN, Available, Due FROM Reserved_Books WHERE Email='$user'";
@@ -48,13 +50,18 @@ if(isset($_POST['book_option_button'])) {
     $result = mysqli_query($con, $sql);
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
+        $isbn = $row["ISBN"];
         if ($row["Available"] == 1) { //add to book list
-            $isbn = $row["ISBN"];
             $user = $_COOKIE["username"];
             $user = str_replace("_", ".", $user);
             $due_time = time()+3628800;
             $sql = "INSERT INTO Borrowed_Books (ISBN, Email, Due) VALUES ($isbn, '$user', $due_time)";
             $add_book_result = mysqli_query($con, $sql); //add new book to book list (6 weeks due)
+            // $update_stock_sql = "SELECT Stock FROM Books WHERE ISBN=$isbn";
+            // $update_stock_result = mysqli_query($con, $update_stock_sql);
+            // $new_stock = mysqli_fetch_array($update_stock_result)["Stock"] - 1;
+            // $update_stock_sql = "UPDATE Books SET Stock = $new_stock WHERE ISBN=$isbn";
+            // $update_stock_result = mysqli_query($con, $update_stock_sql);
         }
         $sql = "DELETE FROM Reserved_Books WHERE ID=$book_ID";
         $remove_reserved_book_result = mysqli_query($con, $sql); //remove the book
