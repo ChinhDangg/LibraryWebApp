@@ -24,7 +24,7 @@ if(isset($_POST['checkout_button'])) {
             if ($stock_result_row["Stock"] > 0) { //check stock available again
                 $user = str_replace("_", ".", $user);
                 $due_time = time()+3628800;
-                $sql = "INSERT INTO Borrowed_Books (ISBN, Email, Due) VALUES ($isbn, '$user', $due_time)";
+                $sql = "INSERT INTO Borrowed_Books (ISBN, Email, Due, Book_Status) VALUES ($isbn, '$user', $due_time, 0)";
                 $add_book_result = mysqli_query($con, $sql); //add new book to book list (6 weeks due)
                 unset($temp_book_list[$books]);
 

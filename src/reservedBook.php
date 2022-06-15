@@ -55,7 +55,7 @@ if(isset($_POST['book_option_button'])) {
             $user = $_COOKIE["username"];
             $user = str_replace("_", ".", $user);
             $due_time = time()+3628800;
-            $sql = "INSERT INTO Borrowed_Books (ISBN, Email, Due) VALUES ($isbn, '$user', $due_time)";
+            $sql = "INSERT INTO Borrowed_Books (ISBN, Email, Due, Book_Status) VALUES ($isbn, '$user', $due_time, 0)";
             $add_book_result = mysqli_query($con, $sql); //add new book to book list (6 weeks due)
             // $update_stock_sql = "SELECT Stock FROM Books WHERE ISBN=$isbn";
             // $update_stock_result = mysqli_query($con, $update_stock_sql);

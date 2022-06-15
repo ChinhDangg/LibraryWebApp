@@ -27,6 +27,10 @@
     </section>
     
     <?php include 'footer.php';?>
+
+    <script>
+        console.log(document.cookie);
+    </script>
         
 </body>
 </html>

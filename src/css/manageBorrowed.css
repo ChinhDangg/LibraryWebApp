@@ -36,17 +36,19 @@ table, th, td {
     text-align: center;
 }
 
-.remove_option {
-    width: fit-content;
-    margin: auto auto;
+.book_status_option_wrapper {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
 }
 
-.remove1, .add1 {
-    padding: 0 5px;
-    color: white;
-    background-color: black;
-    cursor: pointer;
+.book_status_option_wrapper .fa-caret-left {
+    visibility: hidden;
+}
+
+.book_status {
+    margin: 0 5px;
 }
 
 #confirm_remove_book_wrapper {
