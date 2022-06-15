@@ -12,19 +12,20 @@
     <title>User Check</title>
 </head>
 <body>
-
-    <section id="login_area_section">
-        <div id="login_area_wrapper">
-            <h1>Welcome to University Library Login</h1>
-            <h3>Please select which user you are:</h3>
-            <a id="student_login_wrapper" href="login.php?user=Students">
-                <div id="student_login_button">Student</div>
-            </a>
-            <a id="staff_login_wrapper" href="login.php?user=Staffs">
-                <div id="staff_login_button">Faculty/Staff</div>
-            </a>
-        </div>
-    </section>
+    <div id="body_content_container">
+        <section id="login_area_section">
+            <div id="login_area_wrapper">
+                <h1>Welcome to University Library Login</h1>
+                <h3>Please select which user you are:</h3>
+                <a id="student_login_wrapper" href="login.php?user=Students">
+                    <div id="student_login_button">Student</div>
+                </a>
+                <a id="staff_login_wrapper" href="login.php?user=Staffs">
+                    <div id="staff_login_button">Faculty/Staff</div>
+                </a>
+            </div>
+        </section>
+    </div>
     
     <?php include 'footer.php';?>
 

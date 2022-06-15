@@ -22,36 +22,47 @@ if (isset($_POST["input_book_search"]) && !empty($_POST["input_book_search"])) {
 }
 
 if (isset($_POST["confirm_remove_book_button"])) {
-    $book_status_list = explode(",", $_COOKIE["bookStatusList"]);
-    $book_due_list = explode(",", $_COOKIE["bookDueList"]);
-    $book_id_list = explode(",", $_COOKIE["borrowIDList"]);
-
+    $book_due_list = explode(",", $_COOKIE["reservedDueList"]);
+    $book_id_list = explode(",", $_COOKIE["reservedIDList"]);
+    $book_remove_list = explode(",", $_COOKIE["reservedRemoveList"]);
     for ($books = 0; $books < count($book_id_list); $books++) {
-        if (isset($book_status_list[$books]) && $book_status_list[$books] == "Ret") { //book get returned
-            $get_book_isbn_sql = "SELECT ISBN FROM Borrowed_Books WHERE ID=$book_id_list[$books]";
-            $get_book_isbn_result = mysqli_query($con, $get_book_isbn_sql);
-            $current_isbn = mysqli_fetch_array($get_book_isbn_result)["ISBN"];
-            
-            $get_stock_sql = "SELECT Stock FROM Books WHERE ISBN=$current_isbn";
-            $get_stock_result = mysqli_query($con, $get_stock_sql);
-            $new_stock = mysqli_fetch_array($get_stock_result)["Stock"] + 1;
-            $update_stock_sql = "UPDATE Books SET Stock = $new_stock WHERE ISBN=$current_isbn";
-            $update_stock_result = mysqli_query($con, $update_stock_sql);
-
-            $remove_sql = "DELETE FROM Borrowed_Books WHERE ID=$book_id_list[$books]";
+        $get_reserved_book_sql = "SELECT ISBN, Available FROM Reserved_Books WHERE ID=$book_id_list[$books]";
+        $get_reserved_book_result = mysqli_query($con, $get_reserved_book_sql);
+        $get_reserved_book_row = mysqli_fetch_array($get_reserved_book_result);
+        $current_isbn = $get_reserved_book_row["ISBN"];
+        $current_available = $get_reserved_book_row["Available"];
+        if (isset($book_remove_list[$books]) && $book_remove_list[$books] == "rem") { //book get removed
+            if ($current_available == 1) {
+                $get_stock_sql = "SELECT Stock FROM Books WHERE ISBN=$current_isbn";
+                $get_stock_result = mysqli_query($con, $get_stock_sql);
+                $new_stock = mysqli_fetch_array($get_stock_result)["Stock"] + 1;
+                $update_stock_sql = "UPDATE Books SET Stock = $new_stock WHERE ISBN=$current_isbn";
+                $update_stock_result = mysqli_query($con, $update_stock_sql);
+            }
+            $remove_sql = "DELETE FROM Reserved_Books WHERE ID=$book_id_list[$books]";
             $remove_result = mysqli_query($con, $remove_sql); //delete book from borrowed list
         }
         else if (isset($book_due_list[$books]) && $book_due_list[$books] != "") {
-            $updateDue_sql = "UPDATE Borrowed_Books SET Due=$book_due_list[$books] WHERE ID=$book_id_list[$books]";
-            $updateDue_result = mysqli_query($con, $updateDue_sql);
+            if ($book_due_list[$books] < time()) { //due date is passed
+                $sql = "DELETE FROM Reserved_Books WHERE ID=$book_id_list[$books]";
+                $remove_result = mysqli_query($con, $sql); //remove due reserved book from list
+                $sql = "SELECT Stock FROM Books WHERE ISBN=$current_isbn";
+                $update_stock = mysqli_fetch_array(mysqli_query($con, $sql))["Stock"] + 1; //add one copy to stock
+                $sql = "UPDATE Books SET Stock = $update_stock WHERE ISBN=$current_isbn";
+                $update_stock_result = mysqli_query($con, $sql); //update new stock
+            }
+            else {
+                $updateDue_sql = "UPDATE Reserved_Books SET Due=$book_due_list[$books] WHERE ID=$book_id_list[$books]";
+                $updateDue_result = mysqli_query($con, $updateDue_sql);
+            }
         }
     }
-    unset($_COOKIE["bookStatusList"]);
-    setcookie("bookStatusList", null, -1, '/');
-    unset($_COOKIE["bookDueList"]);
-    setcookie("bookDueList", null, -1, '/');
-    unset($_COOKIE["borrowIDList"]);
-    setcookie("borrowIDList", null, -1, '/');
+    unset($_COOKIE["reservedRemoveList"]);
+    setcookie("reservedRemoveList", null, -1, '/');
+    unset($_COOKIE["reservedDueList"]);
+    setcookie("reservedDueList", null, -1, '/');
+    unset($_COOKIE["reservedIDList"]);
+    setcookie("reservedIDList", null, -1, '/');
 }
 
 ?>
@@ -66,14 +77,14 @@ if (isset($_POST["confirm_remove_book_button"])) {
     <link rel="stylesheet" type="text/css" href="css/nav.css">
     <link rel="stylesheet" type="text/css" href="css/footer.css">
     <link rel="stylesheet" type="text/css" href="css/manageBorrowed.css">
-    <title>Manage Borrowed Books</title>
+    <title>Manage Reserved Books</title>
 </head>
 <body>
     <?php include 'nav.php';?>
 
     <div id="body_content_container">
         <div id="manage_header_wrapper">
-            <h1 id="manage_header">Manage Books/Borrowed Books</h1>
+            <h1 id="manage_header">Manage Books/Reserved Books</h1>
         </div>
 
         <div class="search_wrapper">
@@ -88,7 +99,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
         </div>
         
         <section id="manage_book_section">
-            <div style="margin: 0 0 10px 20px">*Returned Book Status will be removed from Borrowed List</div>
+            <div style="margin: 0 0 10px 20px">*Passed due date of Available book will be removed</div>
             <div id="manage_book_wrapper">
                 <table style="width: 100%">
                     <tr>
@@ -99,6 +110,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
                         <th>Username</th>
                         <th>Due (M/d/Y)</th>
                         <th>Status</th>
+                        <th>Remove</th>
                     </tr>
     <?php
     global $manageBook_sql;
@@ -109,7 +121,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
             $borrow_book_id = array();
             while ($manageBook_search_row = mysqli_fetch_assoc($manageBook_search_result)) { //loop search bar result
                 $current_search_isbn = $manageBook_search_row["ISBN"];
-                $manageBook_sql = "SELECT ID, Email, Due, Book_Status FROM Borrowed_Books WHERE ISBN=$current_search_isbn";
+                $manageBook_sql = "SELECT ID, Email, Due, Available FROM Reserved_Books WHERE ISBN=$current_search_isbn";
                 $manageBook_borrow_result = mysqli_query($con, $manageBook_sql);
                 if (mysqli_num_rows($manageBook_borrow_result) > 0) {
                     while ($manageBook_borrow_row = mysqli_fetch_assoc($manageBook_borrow_result)) {
@@ -123,11 +135,6 @@ if (isset($_POST["confirm_remove_book_button"])) {
                         }
                         $current_borrow_username = mysqli_fetch_array($manageBook_username_result)["Username"];
                         array_push($due_time_list, $manageBook_borrow_row["Due"]);
-                        date_default_timezone_set("Asia/Vientiane");
-                        $current_due_date = date("Y-m-d", substr($manageBook_borrow_row["Due"], 0, 10));
-                        $current_due_time = date("H:i", substr($manageBook_borrow_row["Due"], 0, 10));
-                        $new_time_format = $current_due_date . "T" . $current_due_time;
-                        $current_borrow_status = ($manageBook_borrow_row["Book_Status"] == 0) ? "Borrowed" : "Returned";
                         echo '
                         <tr>
                             <td>'.$manageBook_search_row["Title"].'</td>
@@ -135,17 +142,22 @@ if (isset($_POST["confirm_remove_book_button"])) {
                             <td class="book_info">'.$current_search_isbn.'</td>
                             <td class="book_info">'.$current_borrow_email.'</td>
                             <td class="book_info">'.$current_borrow_username.'</td>
-                            <td class="book_info">
-                                <input type="datetime-local" class="book_due_time" name="book_due_time" value="'.$new_time_format.'">';
-                                if ($manageBook_borrow_row["Due"] < time())
-                                echo '<div>Late</div>';
+                            <td class="book_info">';
+                            if ($manageBook_borrow_row["Due"] > time()) {
+                                date_default_timezone_set("Asia/Vientiane");
+                                $current_due_date = date("Y-m-d", substr($manageBook_borrow_row["Due"], 0, 10));
+                                $current_due_time = date("H:i", substr($manageBook_borrow_row["Due"], 0, 10));
+                                $new_time_format = $current_due_date . "T" . $current_due_time; 
+                            echo '<input type="datetime-local" class="book_due_time" name="book_due_time" value="'.$new_time_format.'">';
+                            }
+                            else 
+                            echo '<div>No due date</div>';
                     echo '</td>
                             <td class="book_info">
-                                <div class="book_status_option_wrapper">
-                                    <i class="fa fa-caret-left"></i>
-                                    <div class="book_status">'.$current_borrow_status.'</div>
-                                    <i class="fa fa-caret-right"></i>
-                                </div>
+                                <div class="book_status">'.$current_borrow_status.'</div>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="remove_reserved_checkbox" name="remove_reserved_book" style="margin-left: 15px">
                             </td>
                         </tr>
                         ';
@@ -157,7 +169,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
     else {
         $borrow_book_id = array();
         $due_time_list = array();
-            $manageBook_sql = "SELECT ID, ISBN, Email, Due, Book_Status FROM Borrowed_Books";
+            $manageBook_sql = "SELECT ID, ISBN, Email, Due, Available FROM Reserved_Books";
             $manageBook_borrow_result = mysqli_query($con, $manageBook_sql);
             if (mysqli_num_rows($manageBook_borrow_result) > 0) {
                 while ($manageBook_borrow_row = mysqli_fetch_assoc($manageBook_borrow_result)) {
@@ -174,12 +186,8 @@ if (isset($_POST["confirm_remove_book_button"])) {
                         $manageBook_username_result = mysqli_query($con, $manageBook_sql);
                     }
                     $current_borrow_username = mysqli_fetch_array($manageBook_username_result)["Username"];
+                    $current_borrow_status = ($manageBook_borrow_row["Available"] == 0) ? "Unavailable" : "Available";
                     array_push($due_time_list, $manageBook_borrow_row["Due"]);
-                    date_default_timezone_set("Asia/Vientiane");
-                    $current_due_date = date("Y-m-d", substr($manageBook_borrow_row["Due"], 0, 10));
-                    $current_due_time = date("H:i", substr($manageBook_borrow_row["Due"], 0, 10));
-                    $new_time_format = $current_due_date . "T" . $current_due_time;
-                    $current_borrow_status = ($manageBook_borrow_row["Book_Status"] == 0) ? "Borrowed" : "Returned"; 
                     echo '
                         <tr>
                             <td>'.$mangeBook_book_row["Title"].'</td>
@@ -187,16 +195,23 @@ if (isset($_POST["confirm_remove_book_button"])) {
                             <td class="book_info">'.$current_search_isbn.'</td>
                             <td class="book_info">'.$current_borrow_email.'</td>
                             <td class="book_info">'.$current_borrow_username.'</td>
-                            <td class="book_info">
-                                <input type="datetime-local" class="book_due_time" name="book_due_time" value="'.$new_time_format.'">';
-                                if ($manageBook_borrow_row["Due"] < time())
-                                echo '<div>Late</div>';
+                            <td class="book_info">';
+                        if ($manageBook_borrow_row["Due"] > time()) {
+                            date_default_timezone_set("Asia/Vientiane");
+                            $current_due_date = date("Y-m-d", substr($manageBook_borrow_row["Due"], 0, 10));
+                            $current_due_time = date("H:i", substr($manageBook_borrow_row["Due"], 0, 10));
+                            $new_time_format = $current_due_date . "T" . $current_due_time; 
+                        echo '<input type="datetime-local" class="book_due_time" name="book_due_time" value="'.$new_time_format.'">';
+                        }
+                        else 
+                        echo '<div>No due date</div>';
                     echo '</td>
                             <td class="book_info">
-                                <div class="book_status_option_wrapper">
-                                    <i class="fa fa-caret-left"></i>
-                                    <div class="book_status">'.$current_borrow_status.'</div>
-                                    <i class="fa fa-caret-right""></i>
+                                <div class="book_status">'.$current_borrow_status.'</div>
+                            </td>
+                            <td>
+                                <div style="display: flex; justify-content: center;">
+                                <input type="checkbox" class="remove_reserved_checkbox" name="remove_reserved_book">
                                 </div>
                             </td>
                         </tr>
@@ -214,6 +229,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
     </div>
 
     <?php include 'footer.php';?>
+
     <?php
         $temp_book_id = implode(",", $borrow_book_id);
         $temp_due_time = implode(",", $due_time_list);
@@ -224,6 +240,8 @@ if (isset($_POST["confirm_remove_book_button"])) {
             </script>
         ';
     ?>
-    <script src="JS/manageBorrowed.js"></script>
+
+    <script src="JS/manageReserved.js"></script>
+
 </body>
 </html>

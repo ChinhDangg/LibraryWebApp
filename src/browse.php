@@ -24,54 +24,57 @@ $result = mysqli_query($con, $sql);
 <body>
     <?php include 'nav.php';?>
 
-    <div id="browse_header_wrapper">
-        <h1 id="browse_header">Browse by Genres</h1>
-    </div>
-    <section id="browse_book_section">
-        <div id="browse_book_wrapper">
-            <?php
-                if (mysqli_num_rows($result) > 0) {
-                    //output data of each row
-                    while($row = mysqli_fetch_assoc($result)) {
-                        $sql_book = "SELECT Title, Author, ISBN FROM Books WHERE Genre='{$row['Genre']}' LIMIT 4";
-                        $result_book = mysqli_query($con, $sql_book);
-                        echo '
-                        <div class="genre_type_wrapper">
-                            <div class="genre_type_header_wrapper">
-                                <h3>' .$row["Genre"]. '</h3>
-                                <i id="more_less_button" class="fa fa-caret-down" fa-lg></i>
-                            </div>
-                            <div class="view_some_book_wrapper">
-                                <div class="genre_type_book_wrapper">';
-                                if (mysqli_num_rows($result_book) > 0) {
-                                    //output data of each row
-                                    while($row_book = mysqli_fetch_assoc($result_book)) {
-                                        echo '
-                                            <a class="book_info_wrapper" href="bookInfo.php?isbn='.$row_book["ISBN"].'">
-                                                <div class="book_title">'.$row_book["Title"].'</div>
-                                                <div class="book_author">by '.$row_book["Author"].'</div>
-                                            </a>    
-                                        ';
+    <div id="body_content_container">
+        <div id="browse_header_wrapper">
+            <h1 id="browse_header">Browse by Genres</h1>
+        </div>
+
+        <section id="browse_book_section">
+            <div id="browse_book_wrapper">
+                <?php
+                    if (mysqli_num_rows($result) > 0) {
+                        //output data of each row
+                        while($row = mysqli_fetch_assoc($result)) {
+                            $sql_book = "SELECT Title, Author, ISBN FROM Books WHERE Genre='{$row['Genre']}' LIMIT 4";
+                            $result_book = mysqli_query($con, $sql_book);
+                            echo '
+                            <div class="genre_type_wrapper">
+                                <div class="genre_type_header_wrapper">
+                                    <h3>' .$row["Genre"]. '</h3>
+                                    <i id="more_less_button" class="fa fa-caret-down" fa-lg></i>
+                                </div>
+                                <div class="view_some_book_wrapper">
+                                    <div class="genre_type_book_wrapper">';
+                                    if (mysqli_num_rows($result_book) > 0) {
+                                        //output data of each row
+                                        while($row_book = mysqli_fetch_assoc($result_book)) {
+                                            echo '
+                                                <a class="book_info_wrapper" href="bookInfo.php?isbn='.$row_book["ISBN"].'">
+                                                    <div class="book_title">'.$row_book["Title"].'</div>
+                                                    <div class="book_author">by '.$row_book["Author"].'</div>
+                                                </a>    
+                                            ';
+                                        }
                                     }
-                                }
-                                echo '</div>
-                                <div class="view_more_wrapper">
-                                    <a href="browseGenre.php?genre='.$row["Genre"].'">
-                                        <i class="fa fa-caret-right"></i>
-                                        <div class="view_more_button">View More</div>
-                                    </a>
+                                    echo '</div>
+                                    <div class="view_more_wrapper">
+                                        <a href="browseGenre.php?genre='.$row["Genre"].'">
+                                            <i class="fa fa-caret-right"></i>
+                                            <div class="view_more_button">View More</div>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        ';
+                            ';
 
+                        }
                     }
-                }
-                // closing connection
-                mysqli_close($con);
-            ?>
-        </div>
-    </section>
+                    // closing connection
+                    mysqli_close($con);
+                ?>
+            </div>
+        </section>
+    </div>
 
     <?php include 'footer.php';?>
     

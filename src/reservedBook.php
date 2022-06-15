@@ -86,87 +86,87 @@ if(isset($_POST['book_option_button'])) {
 <body>
     <?php include "nav.php" ?>
 
-    <div id="result_header_wrapper">
-        <h1 id="result_header">Reserved Book</h1>
-    </div>
+    <div id="body_content_container">
+        <div id="result_header_wrapper">
+            <h1 id="result_header">Reserved Book</h1>
+        </div>
 
-    <?php
-        $user = $_COOKIE["username"];
-        $user = str_replace("_", ".", $user);
-        $sql = "SELECT ID, Available FROM Reserved_Books WHERE Email='$user'";
-        $result = mysqli_query($con, $sql); //all reserved books from current user
-        $id_str = ""; $av_str = "";
-        while($row = mysqli_fetch_assoc($result)) {
-            $id_str = $id_str . $row["ID"] . ",";
-            $av_str = $av_str . $row["Available"] . ",";
-        }
-        echo '
-            <script>
-                let reservedBookID = "'.$id_str.'".split(",");
-                let availability = "'.$av_str.'".split(",");
-            </script>
-        ';
-    ?>
-    <section id="reserved_book_section">
         <?php
-            if (mysqli_num_rows($result) < 1)
-                echo '<div><h3 id="no_reserved_book_header" style="margin-left: 50px;">No Reserved Books Currently</h3></div>';
-            else
-                echo '
-                <div id="view_book_info_icon_wrapper">
-                    <i id="view_book_info_icon" class="fa fa-list-ul fa-lg"></i>
-                </div>';        
+            $user = $_COOKIE["username"];
+            $user = str_replace("_", ".", $user);
+            $sql = "SELECT ID, Available FROM Reserved_Books WHERE Email='$user'";
+            $result = mysqli_query($con, $sql); //all reserved books from current user
+            $id_str = ""; $av_str = "";
+            while($row = mysqli_fetch_assoc($result)) {
+                $id_str = $id_str . $row["ID"] . ",";
+                $av_str = $av_str . $row["Available"] . ",";
+            }
+            echo '
+                <script>
+                    let reservedBookID = "'.$id_str.'".split(",");
+                    let availability = "'.$av_str.'".split(",");
+                </script>
+            ';
         ?>
-
-        <div id="all_reserved_book_wrapper">
+        <section id="reserved_book_section">
             <?php
-                $sql = "SELECT ISBN, Available, Due FROM Reserved_Books WHERE Email='$user'";
-                $result = mysqli_query($con, $sql); //all reserved books from current user
-                if (mysqli_num_rows($result) > 0) {
-                    while($row = mysqli_fetch_assoc($result)) {
-                        $reserved_book_availability = "";
-                        if ($row["Available"] == 0) //unavailable reserved book
-                            $reserved_book_availability = "Unavailable";
-                        else { //available
-                            $days = round(($row["Due"]-time())/60/60/24);
-                            $reserved_book_availability = "Available - ".$days." days";
-                        }
-                        echo '
-                            <div class="reserved_book_wrapper" onclick="selectBook(this)">
-                                <div class="reserved_book_img_wrapper">
-                                    <img src="DisplayBooks/display1.jpg" alt="reservedBook">
-                                </div>
-                                <div class="availability_and_info_wrapper">
-                                    <div class="book_current_state">'.$reserved_book_availability.'</div>
-                        ';
-                        $isbn = $row["ISBN"];
-                        $sql = "SELECT Title, Author, ISBN FROM Books WHERE ISBN=$isbn";
-                        $book_info_result = mysqli_query($con, $sql);
-                        $book_info_row = mysqli_fetch_array($book_info_result);
-                                    echo '
-                                        <div class="book_info_wrapper" style="display: none">
-                                            <h3>'.$book_info_row["Title"].'</h3>
-                                            <div>by '.$book_info_row["Author"].'</div>
-                                            <div>ISBN: '.$book_info_row["ISBN"].'</div>
-                                        </div>
-                                    ';
-                         echo '</div>
-                            </div>
-                        ';
-                    }
-                }
+                if (mysqli_num_rows($result) < 1)
+                    echo '<div><h3 id="no_reserved_book_header" style="margin-left: 50px;">No Reserved Books Currently</h3></div>';
+                else
+                    echo '
+                    <div id="view_book_info_icon_wrapper">
+                        <i id="view_book_info_icon" class="fa fa-list-ul fa-lg"></i>
+                    </div>';        
             ?>
-        </div>
+            <div id="all_reserved_book_wrapper">
+                <?php
+                    $sql = "SELECT ISBN, Available, Due FROM Reserved_Books WHERE Email='$user'";
+                    $result = mysqli_query($con, $sql); //all reserved books from current user
+                    if (mysqli_num_rows($result) > 0) {
+                        while($row = mysqli_fetch_assoc($result)) {
+                            $reserved_book_availability = "";
+                            if ($row["Available"] == 0) //unavailable reserved book
+                                $reserved_book_availability = "Unavailable";
+                            else { //available
+                                $days = round(($row["Due"]-time())/60/60/24);
+                                $reserved_book_availability = "Available - ".$days." days";
+                            }
+                            echo '
+                                <div class="reserved_book_wrapper" onclick="selectBook(this)">
+                                    <div class="reserved_book_img_wrapper">
+                                        <img src="DisplayBooks/display1.jpg" alt="reservedBook">
+                                    </div>
+                                    <div class="availability_and_info_wrapper">
+                                        <div class="book_current_state">'.$reserved_book_availability.'</div>
+                            ';
+                            $isbn = $row["ISBN"];
+                            $sql = "SELECT Title, Author, ISBN FROM Books WHERE ISBN=$isbn";
+                            $book_info_result = mysqli_query($con, $sql);
+                            $book_info_row = mysqli_fetch_array($book_info_result);
+                                        echo '
+                                            <div class="book_info_wrapper" style="display: none">
+                                                <h3>'.$book_info_row["Title"].'</h3>
+                                                <div>by '.$book_info_row["Author"].'</div>
+                                                <div>ISBN: '.$book_info_row["ISBN"].'</div>
+                                            </div>
+                                        ';
+                            echo '</div>
+                                </div>
+                            ';
+                        }
+                    }
+                ?>
+            </div>
 
-        <div id="book_option_wrapper">
-            <form method='post'>
-                <input type="submit" name="book_option_button" value="Remove" id="book_option"/>
-            </form>
-        </div>
-    </section>  
+            <div id="book_option_wrapper">
+                <form method='post'>
+                    <input type="submit" name="book_option_button" value="Remove" id="book_option"/>
+                </form>
+            </div>
+        </section>
+    </div>
 
     <?php include 'footer.php';?>
     <script src="JS/reservedBook.js"></script>
-
 </body>
 </html>

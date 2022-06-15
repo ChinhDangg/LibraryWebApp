@@ -46,46 +46,48 @@ if (!empty($_POST["input_book_search"])) {
 <body>
     <?php include 'nav.php'; ?>
 
-    <div id="result_header_wrapper">
-        <h1 id="result_header">Results</h1>
-        <div id="result_count">
-            <?php 
-            if ($result != null) {
-                echo '(' .mysqli_num_rows($result);
-                if (mysqli_num_rows($result) > 1)
-                    echo ' results)';
-                else 
-                    echo ' result)';
-            }
-            else 
-                echo '(0 result)';
-            ?>
-        </div>
-    </div>
-
-    <section id="all_results_section">
-        <div id="all_results_wrapper">
-            <?php
-                if ($result != null && mysqli_num_rows($result) > 0) {
-                    //output data of each row
-                    while($row = mysqli_fetch_assoc($result)) {
-                        echo '
-                        <div class="result_row">
-                            <a class="cover_wrapper" href="bookInfo.php?isbn='.$row["ISBN"].'">
-                                <img src="DisplayBooks/display1.jpg" alt="result_img">
-                            </a>
-                            <a class="result_info_wrapper" href="bookInfo.php?isbn='.$row["ISBN"].'">
-                                <h3>'.$row["Title"].'</h3>
-                                <div>by '.$row["Author"].'</div>
-                                <div>ISBN: '.$row["ISBN"].'</div>
-                            </a>
-                        </div>
-                        ';
-                    }
+    <div id="body_content_container">
+        <div id="result_header_wrapper">
+            <h1 id="result_header">Results</h1>
+            <div id="result_count">
+                <?php 
+                if ($result != null) {
+                    echo '(' .mysqli_num_rows($result);
+                    if (mysqli_num_rows($result) > 1)
+                        echo ' results)';
+                    else 
+                        echo ' result)';
                 }
-            ?>
+                else 
+                    echo '(0 result)';
+                ?>
+            </div>
         </div>
-    </section>
+
+        <section id="all_results_section">
+            <div id="all_results_wrapper">
+                <?php
+                    if ($result != null && mysqli_num_rows($result) > 0) {
+                        //output data of each row
+                        while($row = mysqli_fetch_assoc($result)) {
+                            echo '
+                            <div class="result_row">
+                                <a class="cover_wrapper" href="bookInfo.php?isbn='.$row["ISBN"].'">
+                                    <img src="DisplayBooks/display1.jpg" alt="result_img">
+                                </a>
+                                <a class="result_info_wrapper" href="bookInfo.php?isbn='.$row["ISBN"].'">
+                                    <h3>'.$row["Title"].'</h3>
+                                    <div>by '.$row["Author"].'</div>
+                                    <div>ISBN: '.$row["ISBN"].'</div>
+                                </a>
+                            </div>
+                            ';
+                        }
+                    }
+                ?>
+            </div>
+        </section>
+    </div>
 
     <?php 
     include 'footer.php'; 

@@ -1,6 +1,7 @@
 <?php
 if (isset($_GET['user']) && ($_GET['user'] == 'Students' || $_GET['user'] == 'Staffs'))
     session_start();
+
 else
     header('Location: userCheck.php');
 ?>
@@ -20,24 +21,30 @@ else
 </head>
 <body>
 
-    <section id="login_area_section">
-        <div id="login_area_wrapper">
-            <h1>Sign in to start borrowing books</h1>
-            <?php if (isset($_SESSION["wrongpassword"]))
-                echo '<div style="margin-bottom: 20px; text-align: center">Incorrect email or username</div>'; 
-                session_destroy();
-            ?>
-            <form action=<?php $user = $_GET["user"]; echo '"loginVerification.php?user='.$user.'"'?> method="post">
-                <label for="email">Email:</label><br>
-                <input id="input_email" type="email" name="input_email" placeholder="Enter your email"><br>
-                <label for="password">Password:</label><br>
-                <input id="input_password" type="password" name="input_password" placeholder="Enter your password"><br>
-                <div id="submit_login_container"><input id="submit_login" type="submit"></div>
-            </form>
-        </div>
-    </section>
+    <div id="body_content_container">
+        <section id="login_area_section">
+            <div id="login_area_wrapper">
+                <h1>Sign in to start borrowing books</h1>
+                <?php if (isset($_SESSION["wrongpassword"]))
+                    echo '<div style="margin-bottom: 20px; text-align: center">Incorrect email or username</div>'; 
+                    session_destroy();
+                ?>
+                <form action=<?php $user = $_GET["user"]; echo '"loginVerification.php?user='.$user.'"'?> method="post">
+                    <label for="email">Email:</label><br>
+                    <input id="input_email" type="email" name="input_email" placeholder="Enter your email"><br>
+                    <label for="password">Password:</label><br>
+                    <input id="input_password" type="password" name="input_password" placeholder="Enter your password"><br>
+                    <div id="submit_login_container"><input id="submit_login" type="submit"></div>
+                </form>
+            </div>
+        </section>
+    </div>
     
     <?php include 'footer.php';?>
+
+    <script>
+        console.log(document.cookie);
+    </script>
         
 </body>
 </html>

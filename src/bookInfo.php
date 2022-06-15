@@ -49,86 +49,95 @@ else {
     <title>View Book</title>
 </head>
 <body>
+    <?php include "nav.php" ?>
     <?php
         $user = $_COOKIE["username"];
         if(isset($_POST['add_to_reservationList'])) {
             $isbn = $row["ISBN"];
             $user = str_replace("_", ".", $user);
             $sql = "SELECT ID FROM Reserved_Books WHERE ISBN=$isbn AND Email='$user'";
-            if (mysqli_num_rows(mysqli_query($con, $sql)) <= 0) { //if book is not in reservation list
+            $check_borrowed_sql = "SELECT ID FROM Borrowed_Books WHERE ISBN=$isbn AND Email='$user'";
+            if (mysqli_num_rows(mysqli_query($con, $sql)) < 1 && mysqli_num_rows(mysqli_query($con, $check_borrowed_sql)) < 1) { //if book is not in reservation list and in borrowed list
                 $sql = "INSERT INTO Reserved_Books (ISBN, Email, Available, Due)
                 VALUES ($isbn, '$user', 0, 0)"; //add new book to reservation list
                 $add_book_result = mysqli_query($con, $sql);;
             }
         }
     ?>
-
-    <?php include "nav.php" ?>
-
-    <section id="book_info_section">
-        <div id="book_info_wrapper">
-            <div id="book_img_wrapper">
-                <img src="DisplayBooks/display1.jpg" alt="">
-                <div id="book_year_wrapper">
-                    <div id="book_year">Year Published: <?php echo $row["Published"]?></div>
+    <div id="body_content_container">
+        <section id="book_info_section">
+            <div id="book_info_wrapper">
+                <div id="book_img_wrapper">
+                    <img src="DisplayBooks/display1.jpg" alt="">
+                    <div id="book_year_wrapper">
+                        <div id="book_year">Year Published: <?php echo $row["Published"]?></div>
+                    </div>
+                    <div id="book_isbn_wrapper">
+                        <div id="book_isbn">ISBN: <?php echo $row["ISBN"]?></div>
+                    </div>
                 </div>
-                <div id="book_isbn_wrapper">
-                    <div id="book_isbn">ISBN: <?php echo $row["ISBN"]?></div>
-                </div>
-            </div>
-            <div id="book_text_info_wrapper">
-                <div id="book_title_wrapper">
-                    <div id="book_title"><h2><?php echo $row["Title"]?></h2></div>
-                </div>
-                <div id="book_author_wrapper">
-                    <div id="book_author">by <?php echo $row["Author"]?></div>
-                </div>
-                <div id="book_publisher_wrapper">
-                    <div id="book_publisher"><?php echo $row["Publisher"]?></div>
-                </div>
-                <div id="book_summary_wrapper">
-                    <div id="book_summary"><?php echo $row["Summary"]?></div>
-                </div>
-            </div>
-        </div>
-        <div id="book_available_option_wrapper">
-            <div id="book_text_option_wrapper">Available Slot: <?php echo $row["Stock"]; ?></div>
-            <div id="book_option_button_wrapper">
-                <div id="book_option_button">
-                    <?php
-                        if ($row["Stock"] > 0)
-                            echo '<div class="book_option">Add to Cart </div>';
-                        else
-                            echo '
-                                <form method="post">
-                                    <input type="submit" name="add_to_reservationList" value="Add to Reservation List" class="book_option"/>
-                                </form>
-                            ';
-                    ?>
+                <div id="book_text_info_wrapper">
+                    <div id="book_title_wrapper">
+                        <div id="book_title"><h2><?php echo $row["Title"]?></h2></div>
+                    </div>
+                    <div id="book_author_wrapper">
+                        <div id="book_author">by <?php echo $row["Author"]?></div>
+                    </div>
+                    <div id="book_publisher_wrapper">
+                        <div id="book_publisher"><?php echo $row["Publisher"]?></div>
+                    </div>
+                    <div id="book_summary_wrapper">
+                        <div id="book_summary"><?php echo $row["Summary"]?></div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+            <div id="book_available_option_wrapper">
+                <div id="book_text_option_wrapper">Available Slot: <?php echo $row["Stock"]; ?></div>
+                <div id="book_option_button_wrapper">
+                    <div id="book_option_button">
+                        <?php
+                            if ($row["Stock"] > 0)
+                                echo '<div class="book_option">Add to Cart </div>';
+                            else
+                                echo '
+                                    <form method="post">
+                                        <input type="submit" name="add_to_reservationList" value="Add to Reservation List" class="book_option"/>
+                                    </form>
+                                ';
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <?php
-        if ($row["Stock"] > 0) { //add book to cart
+        $user = $_COOKIE["username"];
+        $user = str_replace("_", ".", $user);
+        $check_isbn = $row["ISBN"];
+        $check_book_borrowed_sql = "SELECT ID FROM Borrowed_Books WHERE ISBN=$check_isbn AND Email='$user'";
+        $check_book_borrowed_result = mysqli_query($con, $check_book_borrowed_sql);
+        if (mysqli_num_rows($check_book_borrowed_result) < 1 && $row["Stock"] > 0) { //book hasn't borrowed and book stock is available
+            $user = str_replace(".", "_", $user);
             echo '
                 <script>
                     document.getElementById("book_option_button").addEventListener("click", function(event) {
                         let books = getCookie("'.$user.'");
-                        books = (books == "") ? "'.$row["ISBN"].'" : (books + ","+"'.$row["ISBN"].'");
-                        
-                        document.cookie = "'.$user.'="+books+"; max-age=864000; path=/";
-                        document.getElementById("cart_num_item_wrapper").innerHTML = books.split(",").length; //update cart number icon                    
+
+                        let checkBook = books.split(",");
+                        if (!checkBook.includes("'.$row["ISBN"].'")) {
+                            books = (books == "") ? "'.$row["ISBN"].'" : (books + ","+"'.$row["ISBN"].'");
+                            document.cookie = "'.$user.'="+books+"; max-age=864000; path=/";
+                            document.getElementById("cart_num_item_wrapper").innerHTML = books.split(",").length; //update cart number icon
+                        }                 
                     });
 
-                    function getCookie(cname) {
+                    function getCookie(cname) { //from w3school.com - how to get cookie using js
                         let name = cname + "=";
-                        let decodedCookie = decodeURIComponent(document.cookie);
-                        let ca = decodedCookie.split(";");
+                        let ca = decodeURIComponent(document.cookie).split(";");
                         for(let i = 0; i <ca.length; i++) {
                             let c = ca[i];
-                            while (c.charAt(0) == " ")
+                            while (c.charAt(0) == " ")  
                                 c = c.substring(1);
                             if (c.indexOf(name) == 0)
                                 return c.substring(name.length, c.length);
@@ -142,6 +151,5 @@ else {
         mysqli_close($con);
     ?>
     <?php include 'footer.php';?>
-    
 </body>
 </html>

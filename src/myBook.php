@@ -29,45 +29,47 @@ $result = mysqli_query($con, $sql); //all reserved books from current user
 <body>
     <?php include "nav.php" ?>
 
-    <div id="my_book_header_wrapper">
-        <h1 id="my_book_header">My Books</h1>
-    </div>
-
-    <section id="my_book_section">
-        <div id="view_book_info_icon_wrapper">
-            <i id="view_book_info_icon" class="fa fa-list-ul fa-lg"></i>
+    <div id="body_content_container">
+        <div id="my_book_header_wrapper">
+            <h1 id="my_book_header">My Books</h1>
         </div>
-        <div id="all_my_book_wrapper">
-        <?php
-            if (mysqli_num_rows($result) > 0) {
-                while($row = mysqli_fetch_assoc($result)) { 
-                    $isbn = $row["ISBN"];
-                    $day_remaining = round(($row["Due"]-time())/60/60/24);
-                    $sql = "SELECT Title, Author FROM Books WHERE ISBN=$isbn";
-                    $book_result = mysqli_query($con, $sql);
-                    $book_row = mysqli_fetch_array($book_result);
-                    // need to display overdue date
-                    echo '
-                        <div class="my_book_wrapper">
-                            <a href="bookInfo.php?isbn='.$isbn.'">
-                                <div class="my_book_img_wrapper">
-                                    <img src="DisplayBooks/display1.jpg" alt="myBook">
-                                </div>
-                                <div class="book_info_wrapper">
-                                    <h3>'.$book_row["Title"].'</h3>
-                                    <div>by '.$book_row["Author"].'</div>
-                                    <div>ISBN: '.$isbn.'</div>
-                                    <div>'.$day_remaining.' days left</div>
-                                </div>
-                            </a>
-                        </div>
-                    ';
+
+        <section id="my_book_section">
+            <div id="view_book_info_icon_wrapper">
+                <i id="view_book_info_icon" class="fa fa-list-ul fa-lg"></i>
+            </div>
+            <div id="all_my_book_wrapper">
+            <?php
+                if (mysqli_num_rows($result) > 0) {
+                    while($row = mysqli_fetch_assoc($result)) { 
+                        $isbn = $row["ISBN"];
+                        $day_remaining = round(($row["Due"]-time())/60/60/24);
+                        $sql = "SELECT Title, Author FROM Books WHERE ISBN=$isbn";
+                        $book_result = mysqli_query($con, $sql);
+                        $book_row = mysqli_fetch_array($book_result);
+                        // need to display overdue date
+                        echo '
+                            <div class="my_book_wrapper">
+                                <a href="bookInfo.php?isbn='.$isbn.'">
+                                    <div class="my_book_img_wrapper">
+                                        <img src="DisplayBooks/display1.jpg" alt="myBook">
+                                    </div>
+                                    <div class="book_info_wrapper">
+                                        <h3>'.$book_row["Title"].'</h3>
+                                        <div>by '.$book_row["Author"].'</div>
+                                        <div>ISBN: '.$isbn.'</div>
+                                        <div>'.$day_remaining.' days left</div>
+                                    </div>
+                                </a>
+                            </div>
+                        ';
+                    }
                 }
-            }
-        ?>
+            ?>
 
-        </div>
-    </section>  
+            </div>
+        </section>
+    </div>
 
     <?php include 'footer.php';?>
 

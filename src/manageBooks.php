@@ -24,20 +24,21 @@ if (!$con) {
 <body>
     <?php include 'nav.php';?>
 
-    <div id="manage_header_wrapper">
-        <h1 id="manage_header">Manage Books</h1>
-    </div>
-    
-    <section id="manage_book_section">
-        <div id="manage_book_wrapper" method="post">
-            <div><a href="addNewBook.php">Add new Book</a></div>
-            <div><a href="removeBooks.php">Remove Books</a></div>
-            <div><a href="manageBorrowed.php">Manage Borrowed Books</a></div>
-            <div><a href="addNewBook.php">Manage Reserved Books</a></div>
+    <div id="body_content_container">
+        <div id="manage_header_wrapper">
+            <h1 id="manage_header">Manage Books</h1>
         </div>
-    </section>
+        
+        <section id="manage_book_section">
+            <div id="manage_book_wrapper" method="post">
+                <div><a href="addNewBook.php">Add new Book</a></div>
+                <div><a href="removeBooks.php">Remove Books</a></div>
+                <div><a href="manageReserved.php">Manage Reserved Books</a></div>
+                <div><a href="manageBorrowed.php">Manage Borrowed Books</a></div>
+            </div>
+        </section>
+    </div>
 
     <?php include 'footer.php';?>
-
 </body>
 </html>

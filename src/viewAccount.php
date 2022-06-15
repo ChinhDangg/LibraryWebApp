@@ -39,43 +39,45 @@ if(isset($_POST['confirm_change_button'])) {
 <body>
     <?php include "nav.php" ?>
 
-    <div id="view_account_header_wrapper">
-        <h1 id="view_account_header">View Account</h1>
-    </div>
-
-    <section id="view_account_section">
-        <div id="view_account_wrapper">
-            <div><a href="changePassword.php">Change Password</a></div>
-            <div id="personal_detail_wrapper">
-                <div><h3>Personal Details:</h3></div>
-                    <form id="personal_details" method="post">
-                        <div id="current_username_wrapper">
-                            <div>Current Username:</div>
-                            <div><?php echo $row["Username"];?></div>
-                        </div>
-                        <div id="first_name_wrapper">
-                            <label for="first_name_input">First Name:</label>
-                            <div class="name_input_wrapper">
-                                <input class="name_input" type="text" name="first_name_input" placeholder="Enter First Name" pattern=".{1,10}" required title="1-10 character">
-                            </div>
-                        </div>
-                        <div id="last_name_wrapper">
-                            <label for="last_name_input">Last Name:</label>
-                            <div class="name_input_wrapper">
-                                <input class="name_input" type="text" name="last_name_input" placeholder="Enter Last Name" pattern=".{1,10}" required title="1-10 character">
-                            </div>
-                        </div>
-                        <div id="email_wrapper">
-                            <div>Emails:</div>
-                            <input type="text" value=<?php echo '"'.$row["Email"].'"'; ?> disabled id="email_input">
-                        </div>
-                        <div id="confirm_button_wrapper">
-                            <input type="submit" name="confirm_change_button" value="Confirm" id="confirm_change_button"/>
-                        </div>
-                    </form>
-            </div>
+    <div id="body_content_container">
+        <div id="view_account_header_wrapper">
+            <h1 id="view_account_header">View Account</h1>
         </div>
-    </section>  
+
+        <section id="view_account_section">
+            <div id="view_account_wrapper">
+                <div><a href="changePassword.php">Change Password</a></div>
+                <div id="personal_detail_wrapper">
+                    <div><h3>Personal Details:</h3></div>
+                        <form id="personal_details" method="post">
+                            <div id="current_username_wrapper">
+                                <div>Current Username:</div>
+                                <div><?php echo $row["Username"];?></div>
+                            </div>
+                            <div id="first_name_wrapper">
+                                <label for="first_name_input">First Name:</label>
+                                <div class="name_input_wrapper">
+                                    <input class="name_input" type="text" name="first_name_input" placeholder="Enter First Name" pattern=".{1,10}" required title="1-10 character">
+                                </div>
+                            </div>
+                            <div id="last_name_wrapper">
+                                <label for="last_name_input">Last Name:</label>
+                                <div class="name_input_wrapper">
+                                    <input class="name_input" type="text" name="last_name_input" placeholder="Enter Last Name" pattern=".{1,10}" required title="1-10 character">
+                                </div>
+                            </div>
+                            <div id="email_wrapper">
+                                <div>Emails:</div>
+                                <input type="text" value=<?php echo '"'.$row["Email"].'"'; ?> disabled id="email_input">
+                            </div>
+                            <div id="confirm_button_wrapper">
+                                <input type="submit" name="confirm_change_button" value="Confirm" id="confirm_change_button"/>
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <?php include 'footer.php';?>
 
