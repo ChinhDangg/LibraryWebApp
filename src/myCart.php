@@ -62,7 +62,7 @@ if(isset($_POST['checkout_button'])) {
 <body>
     <?php include 'nav.php';?>
 
-    <div id="body_content_wrapper">
+    <div id="body_content_container">
         <div id="result_header_wrapper">
             <h1 id="result_header">My Cart</h1>
         </div>

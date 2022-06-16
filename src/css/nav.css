@@ -99,8 +99,8 @@ a {
 #account_pop_up_box {
     position: absolute;
     z-index: 99;
-    right: -50px;
-    width: 250px;
+    right: -15px;
+    width: 215px;
     display: none;
 }
 #triangle{
@@ -286,5 +286,11 @@ a {
     }
     #logo_wrapper {
         margin: 0 auto;
+    }
+    #account_pop_up_box {
+        right: -10%;
+    }
+    #account_pop_up_box #triangle {
+        margin-left: 185px;
     }
 }
