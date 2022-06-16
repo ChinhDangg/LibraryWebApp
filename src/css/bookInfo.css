@@ -1,8 +1,3 @@
-body {
-    max-width: 1350px;
-    margin: 0 auto;
-}
-
 #book_info_section {
     width: 100%;
     height: 100%;
@@ -42,10 +37,6 @@ body {
     margin-bottom: 40px;
 }
 
-#book_text_option_wrapper {
-    margin-bottom: 15px;
-}
-
 #book_available_option_wrapper {
     display: flex;
     flex-direction: column;
@@ -53,15 +44,23 @@ body {
     margin-top: 20px;
 }
 
-#book_option_button a {
+.book_option {
     width: 100%;
     color: white;
     background-color: black;
     padding: 15px 30px;
+    border: none;
     border-radius: 2px;
+    cursor: pointer;
 }
 
 /* Small screen */
+@media screen and (max-width: 1050px) {
+    #book_info_wrapper {
+        margin: 0 10px;
+    }
+}
+
 @media screen and (max-width: 768px) {
     #book_info_wrapper {
         margin: 0 0;
@@ -75,6 +74,8 @@ body {
     }
     #book_img_wrapper img {
         padding: 0 10px;
+        width: 50%;
+        margin: 0 auto;
     }
     #book_text_info_wrapper {
         padding: 0 10px;
@@ -85,5 +86,11 @@ body {
     }
     #book_available_option_wrapper {
         margin-top: 50px;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    #book_img_wrapper img {
+        width: 100%;
     }
 }

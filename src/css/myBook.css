@@ -1,0 +1,81 @@
+#my_book_header {
+    margin-left: 10px;
+}
+
+#my_book_section {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    margin: 40px 0;
+}
+
+#view_book_info_icon_wrapper {
+    display: flex;
+    justify-content: end;
+    width: 100%;
+}
+
+#view_book_info_icon {
+    margin-right: 100px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+#all_my_book_wrapper {
+    margin: 0 auto;
+    max-width: 1260px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.my_book_wrapper {
+    margin-bottom: 30px;
+    margin-left: 10px;
+}
+
+a:hover .my_book_img_wrapper {
+    box-shadow: 1px 1px 1px 1px rgb(200,200,200);
+}
+
+.my_book_img_wrapper img {
+    width: 200px;
+    height: 250px;
+}
+
+.book_info_wrapper {
+    box-shadow: 1px 1px 1px 1px rgb(200,200,200);
+}
+
+.book_info_wrapper h3 {
+    margin: 0 0 20px 10px;
+}
+
+.book_info_wrapper div {
+    margin-left: 10px;
+}
+
+.book_info_wrapper div:not(:nth-child(4)), .book_info_wrapper h3 {
+    display: none;
+}
+
+.book_info_wrapper div:nth-child(4) {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+/* Small screen  */
+@media screen and (max-width: 768px) {
+    #view_book_info_icon_wrapper i {
+        margin-right: 10px;
+    }
+    .my_book_wrapper {
+        margin-bottom: 40px;
+    }
+    #no_reserved_book_header {
+        margin-left: 10px !important;
+    }
+}
+
+
+

@@ -1,0 +1,92 @@
+#view_account_header_wrapper {
+    margin-left: 10px;
+}
+
+#view_account_section {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+}
+
+#view_account_wrapper {
+    margin-left: 100px;
+}
+
+#personal_details {
+    margin-left: 100px;
+}
+
+#current_username_wrapper {
+    margin-bottom: 30px;
+    display: flex;
+}
+
+#current_username_wrapper div {
+    margin-right: 5px;
+}
+
+#first_name_wrapper, #last_name_wrapper {
+    width: 500px;
+    display: flex;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+label {
+    flex: 30%;
+}
+
+.name_input_wrapper {
+    flex: 70%;
+}
+
+.name_input {
+    width: 50%;
+    height: 40px;
+}
+
+#email_wrapper {
+    display: flex;
+}
+#email_wrapper div {
+    margin-right: 5px;
+}
+#email_input {
+    cursor: no-drop;
+}
+
+#confirm_button_wrapper {
+    width: fit-content;
+    margin-top: 20px;
+}
+
+#confirm_change_button {
+    width: 100%;
+    color: white;
+    background-color: black;
+    padding: 15px 30px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: none;
+}
+
+@media screen and (max-width: 768px) {
+    #view_account_wrapper {
+        margin-left: 10px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    #personal_details {
+        margin: 0 10px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    #first_name_wrapper, #last_name_wrapper, .name_input {
+        width: 100%;
+    }
+    .name_input_wrapper {
+        flex: 30%;
+    }
+}
