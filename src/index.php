@@ -19,8 +19,7 @@ if (!$con) {
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <title>University Library</title>
 </head>
-<body>
-    
+<body>    
     <?php include 'nav.php';?>
     
     <div id="body_content_container">

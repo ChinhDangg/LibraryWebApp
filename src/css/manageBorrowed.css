@@ -1,3 +1,8 @@
+#body_content_container {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
 #manage_header_wrapper {
     margin-left: 10px;
 }
@@ -23,7 +28,7 @@ nav .search_wrapper {
 }
 
 table, th, td {
-    border: 1px solid black;
+    border: 1px solid rgb(30, 53, 47);
     border-collapse: collapse;
 }
 
@@ -54,9 +59,21 @@ table, th, td {
 
 #confirm_remove_book_button {
     color: white;
-    background-color: black;
+    background-color: rgb(30, 53, 47);
     padding: 15px 30px;
     border-radius: 2px;
     cursor: pointer;
     border: none;
+}
+
+#borrowed_due_form {
+    display: flex;
+    justify-content: center;
+}
+
+#borrowed_due_input {
+    background-color: white;
+    border: unset;
+    font-weight: bold;
+    cursor: pointer;
 }

@@ -31,7 +31,7 @@ echo'</div>
     <div id="nav_link_wrapper">
         <div class="leftside_link_wrapper" id="menu_wrapper">
             <div id="menu_icon_wrapper">
-                <img src="Pic/menu.jpg" alt="menu_icon">
+                <i id="menu_icon" class="fa fa-bars"></i>
             </div>
         </div>
 
@@ -71,7 +71,7 @@ echo'</div>
             </div>
             <div id="cart_wrapper">
                 <a href="myCart.php" id="cart_link_wrapper">
-                    <i class="fa fa-shopping-basket fa-2x"></i>
+                    <i id="cart_icon" class="fa fa-shopping-basket fa-2x"></i>
                     <div id="cart_num_item_wrapper">';
                         $username = $_COOKIE["username"];
                         $username = str_replace(".", "_", $username);

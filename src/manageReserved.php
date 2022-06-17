@@ -15,6 +15,9 @@ if (isset($_POST["input_book_search"]) && !empty($_POST["input_book_search"])) {
             $manageBook_sql = "SELECT Title, Author, ISBN FROM Books WHERE ISBN=$input_search";
         }
     }
+    else if (str_contains($input_search, "@") && (str_contains($input_search, ".com") || str_contains($input_search, ".edu"))) { //email student search
+        $email_search = $input_search;
+    }
     else {
         $input_search = preg_replace('/[^\da-z ]/i', '', $input_search);
         $manageBook_sql = "SELECT Title, Author, ISBN FROM Books WHERE Author LIKE '%{$input_search}%' OR Title LIKE '%{$input_search}%'";
@@ -90,7 +93,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
         <div class="search_wrapper">
             <div class="type_search">
                 <form method="post" class="form_search_wrapper">
-                    <input class="input_book_search" type="search" name="input_book_search" placeholder="Search by Title, Author, or ISBN" pattern=".{3,}" required title="3 characters minimum">
+                    <input class="input_book_search" type="search" name="input_book_search" placeholder="Search by Title, Author, ISBN or User Email" pattern=".{3,}" required title="3 characters minimum">
                     <div class="submit_icon_wrapper">
                         <input class="search_submit_icon" type="image" name="submit_search_icon" src="Pic/search.png" alt="Submit">
                     </div>
@@ -161,7 +164,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
                             </td>
                         </tr>
                         ';
-                    }   
+                    }
                 }
             }
         }
@@ -169,7 +172,11 @@ if (isset($_POST["confirm_remove_book_button"])) {
     else {
         $borrow_book_id = array();
         $due_time_list = array();
+        global $email_search;
+        if (empty($email_search))
             $manageBook_sql = "SELECT ID, ISBN, Email, Due, Available FROM Reserved_Books";
+        else
+            $manageBook_sql = "SELECT ID, ISBN, Email, Due, Available FROM Reserved_Books WHERE Email='$email_search'";
             $manageBook_borrow_result = mysqli_query($con, $manageBook_sql);
             if (mysqli_num_rows($manageBook_borrow_result) > 0) {
                 while ($manageBook_borrow_row = mysqli_fetch_assoc($manageBook_borrow_result)) {

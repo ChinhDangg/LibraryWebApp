@@ -33,7 +33,7 @@
 }
 
 .result_row:not(:last-child) {
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid rgb(130, 140, 81);
 }
 
 .cover_wrapper {
@@ -67,6 +67,7 @@
 
 .remove_book_wrapper i {
     cursor: pointer;
+    color:rgb(30, 53, 47)
 }
 
 #cart_checkout_wrapper {
@@ -80,7 +81,7 @@
 }
 
 #cart_checkout_total_wrapper {
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid rgb(130, 140, 81);
 }
 
 #cart_checkout_total {
@@ -95,7 +96,7 @@
 #cart_checkout_button {
     width: 100%;
     color: white;
-    background-color: black;
+    background-color: rgb(30, 53, 47);
     padding: 15px 30px;
     border-radius: 2px;
     cursor: pointer;
@@ -111,7 +112,7 @@
         padding-left: 10px;
         padding-right: 10px;
         margin-left: 0;
-        border-bottom: 1px solid gray;
+        border-bottom: 1px solid rgb(130, 140, 81);
     }
     .cover_wrapper {
         flex: 40%;

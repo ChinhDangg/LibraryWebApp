@@ -35,9 +35,15 @@ $result = mysqli_query($con, $sql); //all reserved books from current user
         </div>
 
         <section id="my_book_section">
-            <div id="view_book_info_icon_wrapper">
-                <i id="view_book_info_icon" class="fa fa-list-ul fa-lg"></i>
-            </div>
+            <?php
+                if (mysqli_num_rows($result) < 1)
+                    echo '<div><h3 id="no_reserved_book_header" style="margin-left: 50px;">No Book Found. Start Reading Today</h3></div>';
+                else
+                    echo '
+                    <div id="view_book_info_icon_wrapper">
+                        <i id="view_book_info_icon" class="fa fa-list-ul fa-lg"></i>
+                    </div>';        
+            ?>
             <div id="all_my_book_wrapper">
             <?php
                 if (mysqli_num_rows($result) > 0) {

@@ -18,7 +18,7 @@
 }
 
 #student_login_button, #staff_login_button {
-    background-color: black;
+    background-color: rgb(30, 53, 47);
     color: white;
     padding: 15px;
     margin: 0 10px 5px 10px;
