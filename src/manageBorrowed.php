@@ -31,10 +31,10 @@ if (isset($_POST["confirm_remove_book_button"])) {
     $book_id_list = explode(",", $_COOKIE["borrowIDList"]);
 
     for ($books = 0; $books < count($book_id_list); $books++) {
-        if (isset($book_status_list[$books]) && $book_status_list[$books] != "Ret") {
+        if (isset($book_status_list[$books]) && ($book_status_list[$books] == "Borrowed" || $book_status_list[$books] == "Not Pickup")) {
             if ($book_status_list[$books] == "Borrowed")
                 $update_status_sql = "UPDATE Borrowed_Books SET Book_Status=1 WHERE ID=$book_id_list[$books]";
-            else
+            else if ($book_status_list[$books] == "Not Pickup")
                 $update_status_sql = "UPDATE Borrowed_Books SET Book_Status=0 WHERE ID=$book_id_list[$books]";
             $update_status_result = mysqli_query($con, $update_status_sql);
         }
@@ -55,24 +55,24 @@ if (isset($_POST["confirm_remove_book_button"])) {
         else if (isset($book_due_list[$books]) && $book_due_list[$books] != "") {
             $updateDue_sql = "UPDATE Borrowed_Books SET Due=$book_due_list[$books] WHERE ID=$book_id_list[$books]";
             $updateDue_result = mysqli_query($con, $updateDue_sql);
-            $current_time = time();
-            $sql = "SELECT ID, ISBN FROM Borrowed_Books WHERE Due <= $current_time AND Book_Status=0";
-            $get_late_notpick_result = mysqli_query($con, $sql);
-            if (mysqli_num_rows($get_late_notpick_result) > 0) {
-                $isbn_toupdate_list = array();
-                while ($late_notpic_row = mysqli_fetch_assoc($get_late_notpick_result)) {
-                    array_push($isbn_toupdate_list, $late_notpic_row["ISBN"]);
-                    $current_id = $late_notpic_row["ID"];
-                    $sql = "DELETE FROM Borrowed_Books WHERE ID=$current_id";
-                    $delete_late_notpick_result = mysqli_query($con, $sql);
-                }
-                for ($upcount = 0; $upcount < count($isbn_toupdate_list); $upcount++) {
-                    $sql = "SELECT Stock FROM Books WHERE ISBN=$isbn_toupdate_list[$upcount]";
-                    $update_stock = mysqli_fetch_array(mysqli_query($con, $sql))["Stock"] + 1;
-                    $sql = "UPDATE Books SET Stock = $update_stock WHERE ISBN=$isbn_toupdate_list[$upcount]";
-                    $update_stock_result = mysqli_query($con, $sql);
-                }
-            }
+        }
+    }
+    $current_time = time();
+    $sql = "SELECT ID, ISBN FROM Borrowed_Books WHERE Due <= $current_time AND Book_Status=0";
+    $get_late_notpick_result = mysqli_query($con, $sql);
+    if (mysqli_num_rows($get_late_notpick_result) > 0) {
+        $isbn_toupdate_list = array();
+        while ($late_notpic_row = mysqli_fetch_assoc($get_late_notpick_result)) {
+            array_push($isbn_toupdate_list, $late_notpic_row["ISBN"]);
+            $current_id = $late_notpic_row["ID"];
+            $sql = "DELETE FROM Borrowed_Books WHERE ID=$current_id";
+            $delete_late_notpick_result = mysqli_query($con, $sql);
+        }
+        for ($upcount = 0; $upcount < count($isbn_toupdate_list); $upcount++) {
+            $sql = "SELECT Stock FROM Books WHERE ISBN=$isbn_toupdate_list[$upcount]";
+            $update_stock = mysqli_fetch_array(mysqli_query($con, $sql))["Stock"] + 1;
+            $sql = "UPDATE Books SET Stock = $update_stock WHERE ISBN=$isbn_toupdate_list[$upcount]";
+            $update_stock_result = mysqli_query($con, $sql);
         }
     }
     unset($_COOKIE["bookStatusList"]);
