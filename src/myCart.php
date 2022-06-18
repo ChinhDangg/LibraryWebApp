@@ -6,11 +6,6 @@ if (!$con) {
     die("Connection failed: " .mysqli_connect_errno());
 }
 
-// foreach ($_COOKIE as $key=>$val)
-//   {
-//     echo $key.' is '.$val."<br>\n";
-//   }
-
 if(isset($_POST['checkout_button'])) {
     $user = $_COOKIE["username"];
     if (isset($_COOKIE[$user])) {
@@ -62,7 +57,7 @@ if(isset($_POST['checkout_button'])) {
 <body>
     <?php include 'nav.php';?>
 
-    <div id="body_content_container">
+    <div id="body_content_wrapper">
         <div id="result_header_wrapper">
             <h1 id="result_header">My Cart</h1>
         </div>

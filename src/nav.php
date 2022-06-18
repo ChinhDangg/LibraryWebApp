@@ -17,7 +17,7 @@
             <i class="fa fa-globe" aria-hidden="true"></i>
             <a class="browse_link" href="browse.php">Browse</a>
         </div>';
-if ($_COOKIE["user"] == "Staffs")
+if ($_COOKIE["user"] == "staffs")
     echo '
         <div class="side_browse_wrapper" style="margin-top: 10px;">
             <i class="fa fa-globe" aria-hidden="true"></i>
@@ -31,7 +31,7 @@ echo'</div>
     <div id="nav_link_wrapper">
         <div class="leftside_link_wrapper" id="menu_wrapper">
             <div id="menu_icon_wrapper">
-                <i id="menu_icon" class="fa fa-bars"></i>
+                <img src="Pic/menu.jpg" alt="menu_icon">
             </div>
         </div>
 
@@ -42,7 +42,7 @@ echo'</div>
             <div class="browse_wrapper">
                 <a class="browse_link" href="browse.php">Browse</a>
             </div>';
-    if ($_COOKIE["user"] == "Staffs")
+    if ($_COOKIE["user"] == "staffs")
         echo '
             <div class="browse_wrapper">
                 <a class="browse_link" href="manageBooks.php">Manage Books</a>
@@ -71,7 +71,7 @@ echo'</div>
             </div>
             <div id="cart_wrapper">
                 <a href="myCart.php" id="cart_link_wrapper">
-                    <i id="cart_icon" class="fa fa-shopping-basket fa-2x"></i>
+                    <i class="fa fa-shopping-basket fa-2x"></i>
                     <div id="cart_num_item_wrapper">';
                         $username = $_COOKIE["username"];
                         $username = str_replace(".", "_", $username);

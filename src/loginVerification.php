@@ -1,5 +1,5 @@
 <?php
-if ($_GET['user'] == 'Students' || $_GET['user'] == 'Staffs') {
+if ($_GET['user'] == 'students' || $_GET['user'] == 'staffs') {
     session_start();
     $con = new mysqli('mysql_db', 'root', 'root', 'uni_book_db');
     if (!$con) {

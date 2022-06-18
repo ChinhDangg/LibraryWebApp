@@ -56,11 +56,11 @@ a:hover .my_book_img_wrapper {
     margin-left: 10px;
 }
 
-.book_info_wrapper div:not(:nth-child(4)), .book_info_wrapper h3 {
+.book_info_wrapper div:not(.day_borrow_remaining, .return_message, .not_pickup_message), .book_info_wrapper h3 {
     display: none;
 }
 
-.book_info_wrapper div:nth-child(4) {
+.day_borrow_remaining, .return_message, .not_pickup_message {
     text-align: center;
     padding-bottom: 10px;
 }

@@ -28,19 +28,6 @@ if ($_GET['isbn'] !== "") {
     $row = mysqli_fetch_array($result);
     if (mysqli_num_rows($result) < 1)
         header('Location: browse.php');
-    
-    if(isset($_POST['add_to_reservationList'])) {
-        $isbn = $row["ISBN"];
-        $user = $_COOKIE["username"];
-        $user = str_replace("_", ".", $user);
-        $sql = "SELECT ID FROM Reserved_Books WHERE ISBN=$isbn AND Email='$user'";
-        $check_borrowed_sql = "SELECT ID FROM Borrowed_Books WHERE ISBN=$isbn AND Email='$user'";
-        if (mysqli_num_rows(mysqli_query($con, $sql)) < 1 && mysqli_num_rows(mysqli_query($con, $check_borrowed_sql)) < 1) { //if book is not in reservation list and in borrowed list
-            $sql = "INSERT INTO Reserved_Books (ISBN, Email, Available, Due)
-            VALUES ($isbn, '$user', 0, 0)"; //add new book to reservation list
-            $add_book_result = mysqli_query($con, $sql);;
-        }
-    }
 
 }
 else {
@@ -56,9 +43,9 @@ else {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="University Library Website Application">
     <link rel="stylesheet" href="Font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/nav.css">
-    <link rel="stylesheet" type="text/css" href="css/footer.css">
-    <link rel="stylesheet" type="text/css" href="css/bookInfo.css">
+    <link rel="stylesheet" type="text/css" href="CSS/nav.css">
+    <link rel="stylesheet" type="text/css" href="CSS/footer.css">
+    <link rel="stylesheet" type="text/css" href="CSS/bookInfo.css">
     <title>View Book</title>
 </head>
 <body>
@@ -102,8 +89,12 @@ else {
                                 $check_isbn = $row["ISBN"];
                                 $check_book_borrowed_sql = "SELECT ID FROM Borrowed_Books WHERE ISBN=$check_isbn AND Email='$user'";
                                 $check_book_borrowed_result = mysqli_query($con, $check_book_borrowed_sql);
+                                $user = str_replace(".", "_", $user);
                                 if (mysqli_num_rows($check_book_borrowed_result) > 0)
                                     echo '<div class="book_option" style="cursor: no-drop">Book\'s Owned</div>';
+                                else if (isset($_COOKIE[$user]) && str_contains($_COOKIE[$user], $check_isbn)) {
+                                    echo '<div class="book_option" style="cursor: no-drop">Book\'s in Cart</div>'; 
+                                }
                                 else
                                     echo '<div class="book_option">Add to Cart</div>';
                             }

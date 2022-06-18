@@ -1,6 +1,6 @@
 <?php
 include 'loginCredential.php';
-if ($_COOKIE["user"] != "Staffs")
+if ($_COOKIE["user"] != "staffs")
     header ("Location: index.php");
 $con = new mysqli('mysql_db', 'root', 'root', 'uni_book_db');
 if (!$con) {
@@ -17,7 +17,6 @@ if (isset($_POST["input_book_search"]) && !empty($_POST["input_book_search"])) {
     }
     else if (str_contains($input_search, "@") && (str_contains($input_search, ".com") || str_contains($input_search, ".edu"))) { //email student search
         $input_search = str_replace(' ', '', $input_search);
-        $input_search = str_replace('\n', '', $input_search);
         $email_search = $input_search;
     }
     else {
@@ -32,6 +31,13 @@ if (isset($_POST["confirm_remove_book_button"])) {
     $book_id_list = explode(",", $_COOKIE["borrowIDList"]);
 
     for ($books = 0; $books < count($book_id_list); $books++) {
+        if (isset($book_status_list[$books]) && $book_status_list[$books] != "Ret") {
+            if ($book_status_list[$books] == "Borrowed")
+                $update_status_sql = "UPDATE Borrowed_Books SET Book_Status=1 WHERE ID=$book_id_list[$books]";
+            else
+                $update_status_sql = "UPDATE Borrowed_Books SET Book_Status=0 WHERE ID=$book_id_list[$books]";
+            $update_status_result = mysqli_query($con, $update_status_sql);
+        }
         if (isset($book_status_list[$books]) && $book_status_list[$books] == "Ret") { //book get returned
             $get_book_isbn_sql = "SELECT ISBN FROM Borrowed_Books WHERE ID=$book_id_list[$books]";
             $get_book_isbn_result = mysqli_query($con, $get_book_isbn_sql);
@@ -49,6 +55,24 @@ if (isset($_POST["confirm_remove_book_button"])) {
         else if (isset($book_due_list[$books]) && $book_due_list[$books] != "") {
             $updateDue_sql = "UPDATE Borrowed_Books SET Due=$book_due_list[$books] WHERE ID=$book_id_list[$books]";
             $updateDue_result = mysqli_query($con, $updateDue_sql);
+            $current_time = time();
+            $sql = "SELECT ID, ISBN FROM Borrowed_Books WHERE Due <= $current_time AND Book_Status=0";
+            $get_late_notpick_result = mysqli_query($con, $sql);
+            if (mysqli_num_rows($get_late_notpick_result) > 0) {
+                $isbn_toupdate_list = array();
+                while ($late_notpic_row = mysqli_fetch_assoc($get_late_notpick_result)) {
+                    array_push($isbn_toupdate_list, $late_notpic_row["ISBN"]);
+                    $current_id = $late_notpic_row["ID"];
+                    $sql = "DELETE FROM Borrowed_Books WHERE ID=$current_id";
+                    $delete_late_notpick_result = mysqli_query($con, $sql);
+                }
+                for ($upcount = 0; $upcount < count($isbn_toupdate_list); $upcount++) {
+                    $sql = "SELECT Stock FROM Books WHERE ISBN=$isbn_toupdate_list[$upcount]";
+                    $update_stock = mysqli_fetch_array(mysqli_query($con, $sql))["Stock"] + 1;
+                    $sql = "UPDATE Books SET Stock = $update_stock WHERE ISBN=$isbn_toupdate_list[$upcount]";
+                    $update_stock_result = mysqli_query($con, $sql);
+                }
+            }
         }
     }
     unset($_COOKIE["bookStatusList"]);
@@ -58,6 +82,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
     unset($_COOKIE["borrowIDList"]);
     setcookie("borrowIDList", null, -1, '/');
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,7 +108,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
         <div class="search_wrapper">
             <div class="type_search">
                 <form method="post" class="form_search_wrapper">
-                    <input class="input_book_search" type="search" name="input_book_search" placeholder="Search by Title, Author, ISBN or User Email" pattern=".{3,}" required title="3 characters minimum">
+                    <input class="input_book_search" type="search" name="input_book_search" placeholder="Search by Title, Author, or ISBN" pattern=".{3,}" required title="3 characters minimum">
                     <div class="submit_icon_wrapper">
                         <input class="search_submit_icon" type="image" name="submit_search_icon" src="Pic/search.png" alt="Submit">
                     </div>
@@ -93,6 +118,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
         
         <section id="manage_book_section">
             <div style="margin: 0 0 10px 20px">*Returned Book Status will be removed from Borrowed List</div>
+            <div style="margin: 0 0 10px 20px">*Passed Due Date for Not Pickup Book will be removed from Borrowed List</div>
             <div id="manage_book_wrapper">
                 <table style="width: 100%">
                     <tr>
@@ -111,6 +137,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
         if (mysqli_num_rows($manageBook_search_result) > 0) {
             $due_time_list = array();
             $borrow_book_id = array();
+            $borrow_status_list = array();
             while ($manageBook_search_row = mysqli_fetch_assoc($manageBook_search_result)) { //loop search bar result
                 $current_search_isbn = $manageBook_search_row["ISBN"];
                 $manageBook_sql = "SELECT ID, Email, Due, Book_Status FROM Borrowed_Books WHERE ISBN=$current_search_isbn";
@@ -119,10 +146,10 @@ if (isset($_POST["confirm_remove_book_button"])) {
                     while ($manageBook_borrow_row = mysqli_fetch_assoc($manageBook_borrow_result)) {
                         array_push($borrow_book_id, $manageBook_borrow_row["ID"]);
                         $current_borrow_email = $manageBook_borrow_row["Email"];
-                        $manageBook_sql = "SELECT Username, Email FROM Students WHERE Email='$current_borrow_email'";
+                        $manageBook_sql = "SELECT Username, Email FROM students WHERE Email='$current_borrow_email'";
                         $manageBook_username_result = mysqli_query($con, $manageBook_sql);
                         if (mysqli_num_rows($manageBook_username_result) < 1) {
-                            $manageBook_sql = "SELECT Username, Email FROM Staffs WHERE Email='$current_borrow_email'";
+                            $manageBook_sql = "SELECT Username, Email FROM staffs WHERE Email='$current_borrow_email'";
                             $manageBook_username_result = mysqli_query($con, $manageBook_sql);
                         }
                         $current_borrow_username = mysqli_fetch_array($manageBook_username_result)["Username"];
@@ -131,7 +158,8 @@ if (isset($_POST["confirm_remove_book_button"])) {
                         $current_due_date = date("Y-m-d", substr($manageBook_borrow_row["Due"], 0, 10));
                         $current_due_time = date("H:i", substr($manageBook_borrow_row["Due"], 0, 10));
                         $new_time_format = $current_due_date . "T" . $current_due_time;
-                        $current_borrow_status = ($manageBook_borrow_row["Book_Status"] == 0) ? "Borrowed" : "Returned";
+                        $current_borrow_status = ($manageBook_borrow_row["Book_Status"] == 0) ? "Not Pickup" : "Borrowed";
+                        array_push($borrow_status_list, $current_borrow_status);
                         echo '
                         <tr>
                             <td>'.$manageBook_search_row["Title"].'</td>
@@ -161,6 +189,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
     else {
         $borrow_book_id = array();
         $due_time_list = array();
+        $borrow_status_list = array();
         if (empty($email_search))
             $manageBook_sql = "SELECT ID, ISBN, Email, Due, Book_Status FROM Borrowed_Books ORDER BY Due ASC";
         else
@@ -174,10 +203,10 @@ if (isset($_POST["confirm_remove_book_button"])) {
                     $manageBook_book_result = mysqli_query($con, $manageBook_sql);
                     $mangeBook_book_row = mysqli_fetch_array($manageBook_book_result);
                     $current_borrow_email = $manageBook_borrow_row["Email"];
-                    $manageBook_sql = "SELECT Username, Email FROM Students WHERE Email='$current_borrow_email'";
+                    $manageBook_sql = "SELECT Username, Email FROM students WHERE Email='$current_borrow_email'";
                     $manageBook_username_result = mysqli_query($con, $manageBook_sql);
                     if (mysqli_num_rows($manageBook_username_result) < 1) {
-                        $manageBook_sql = "SELECT Username, Email FROM Staffs WHERE Email='$current_borrow_email'";
+                        $manageBook_sql = "SELECT Username, Email FROM staffs WHERE Email='$current_borrow_email'";
                         $manageBook_username_result = mysqli_query($con, $manageBook_sql);
                     }
                     $current_borrow_username = mysqli_fetch_array($manageBook_username_result)["Username"];
@@ -186,7 +215,8 @@ if (isset($_POST["confirm_remove_book_button"])) {
                     $current_due_date = date("Y-m-d", substr($manageBook_borrow_row["Due"], 0, 10));
                     $current_due_time = date("H:i", substr($manageBook_borrow_row["Due"], 0, 10));
                     $new_time_format = $current_due_date . "T" . $current_due_time;
-                    $current_borrow_status = ($manageBook_borrow_row["Book_Status"] == 0) ? "Borrowed" : "Returned"; 
+                    $current_borrow_status = ($manageBook_borrow_row["Book_Status"] == 0) ? "Not Pickup" : "Borrowed";
+                    array_push($borrow_status_list, $current_borrow_status);
                     echo '
                         <tr>
                             <td>'.$mangeBook_book_row["Title"].'</td>
@@ -201,7 +231,6 @@ if (isset($_POST["confirm_remove_book_button"])) {
                     echo '</td>
                             <td class="book_info">
                                 <div class="book_status_option_wrapper">
-                                    <i class="fa fa-caret-left"></i>
                                     <div class="book_status">'.$current_borrow_status.'</div>
                                     <i class="fa fa-caret-right""></i>
                                 </div>
@@ -224,10 +253,12 @@ if (isset($_POST["confirm_remove_book_button"])) {
     <?php
         $temp_book_id = implode(",", $borrow_book_id);
         $temp_due_time = implode(",", $due_time_list);
+        $temp_book_status = implode(",", $borrow_status_list);
         echo '
             <script>
                 let borrow_book_id = "'.$temp_book_id.'".split(",");
                 let due_time_list = "'.$temp_due_time.'".split(",");
+                let book_status_list = "'.$temp_book_status.'".split(",");
             </script>
         ';
     ?>

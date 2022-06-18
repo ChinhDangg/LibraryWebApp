@@ -1,6 +1,6 @@
 <?php
 include 'loginCredential.php';
-if ($_COOKIE["user"] != "Staffs")
+if ($_COOKIE["user"] != "staffs")
     header ("Location: index.php");
 $con = new mysqli('mysql_db', 'root', 'root', 'uni_book_db');
 if (!$con) {
@@ -93,7 +93,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
         <div class="search_wrapper">
             <div class="type_search">
                 <form method="post" class="form_search_wrapper">
-                    <input class="input_book_search" type="search" name="input_book_search" placeholder="Search by Title, Author, ISBN or User Email" pattern=".{3,}" required title="3 characters minimum">
+                    <input class="input_book_search" type="search" name="input_book_search" placeholder="Search by Title, Author, or ISBN" pattern=".{3,}" required title="3 characters minimum">
                     <div class="submit_icon_wrapper">
                         <input class="search_submit_icon" type="image" name="submit_search_icon" src="Pic/search.png" alt="Submit">
                     </div>
@@ -130,10 +130,10 @@ if (isset($_POST["confirm_remove_book_button"])) {
                     while ($manageBook_borrow_row = mysqli_fetch_assoc($manageBook_borrow_result)) {
                         array_push($borrow_book_id, $manageBook_borrow_row["ID"]);
                         $current_borrow_email = $manageBook_borrow_row["Email"];
-                        $manageBook_sql = "SELECT Username, Email FROM Students WHERE Email='$current_borrow_email'";
+                        $manageBook_sql = "SELECT Username, Email FROM students WHERE Email='$current_borrow_email'";
                         $manageBook_username_result = mysqli_query($con, $manageBook_sql);
                         if (mysqli_num_rows($manageBook_username_result) < 1) {
-                            $manageBook_sql = "SELECT Username, Email FROM Staffs WHERE Email='$current_borrow_email'";
+                            $manageBook_sql = "SELECT Username, Email FROM staffs WHERE Email='$current_borrow_email'";
                             $manageBook_username_result = mysqli_query($con, $manageBook_sql);
                         }
                         $current_borrow_username = mysqli_fetch_array($manageBook_username_result)["Username"];
@@ -164,7 +164,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
                             </td>
                         </tr>
                         ';
-                    }
+                    }   
                 }
             }
         }
@@ -172,12 +172,11 @@ if (isset($_POST["confirm_remove_book_button"])) {
     else {
         $borrow_book_id = array();
         $due_time_list = array();
-        global $email_search;
         if (empty($email_search))
             $manageBook_sql = "SELECT ID, ISBN, Email, Due, Available FROM Reserved_Books";
         else
             $manageBook_sql = "SELECT ID, ISBN, Email, Due, Available FROM Reserved_Books WHERE Email='$email_search'";
-            $manageBook_borrow_result = mysqli_query($con, $manageBook_sql);
+        $manageBook_borrow_result = mysqli_query($con, $manageBook_sql);
             if (mysqli_num_rows($manageBook_borrow_result) > 0) {
                 while ($manageBook_borrow_row = mysqli_fetch_assoc($manageBook_borrow_result)) {
                     array_push($borrow_book_id, $manageBook_borrow_row["ID"]);
@@ -186,10 +185,10 @@ if (isset($_POST["confirm_remove_book_button"])) {
                     $manageBook_book_result = mysqli_query($con, $manageBook_sql);
                     $mangeBook_book_row = mysqli_fetch_array($manageBook_book_result);
                     $current_borrow_email = $manageBook_borrow_row["Email"];
-                    $manageBook_sql = "SELECT Username, Email FROM Students WHERE Email='$current_borrow_email'";
+                    $manageBook_sql = "SELECT Username, Email FROM students WHERE Email='$current_borrow_email'";
                     $manageBook_username_result = mysqli_query($con, $manageBook_sql);
                     if (mysqli_num_rows($manageBook_username_result) < 1) {
-                        $manageBook_sql = "SELECT Username, Email FROM Staffs WHERE Email='$current_borrow_email'";
+                        $manageBook_sql = "SELECT Username, Email FROM staffs WHERE Email='$current_borrow_email'";
                         $manageBook_username_result = mysqli_query($con, $manageBook_sql);
                     }
                     $current_borrow_username = mysqli_fetch_array($manageBook_username_result)["Username"];

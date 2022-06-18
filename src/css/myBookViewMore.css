@@ -22,7 +22,7 @@
     display: block;
 }
 
-.book_info_wrapper div:nth-child(4) { /*time remaining*/
+.day_borrow_remaining, .return_message, .not_pickup_message { /*time remaining*/
     text-align: unset;
     margin-top: 20px;
     padding: unset;
@@ -44,16 +44,19 @@
     .book_info_wrapper h3, .book_info_wrapper div {
         font-size: smaller;
     }
+    .day_borrow_remaining, .return_message, .not_pickup_message {
+        margin-top: 0;
+        padding-bottom: 3px;
+        margin-top: 3px;
+    }
 }
 
 @media screen and (max-width: 300px) {
     .book_info_wrapper h3 {
         margin-bottom: 0;
+        font-size: x-small;
     }
     .book_info_wrapper div {
         font-size: x-small;
-    }
-    .book_info_wrapper div:nth-child(4) {
-        margin-top: 0;
     }
 }

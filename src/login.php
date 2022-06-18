@@ -1,5 +1,5 @@
 <?php
-if (isset($_GET['user']) && ($_GET['user'] == 'Students' || $_GET['user'] == 'Staffs'))
+if (isset($_GET['user']) && ($_GET['user'] == 'students' || $_GET['user'] == 'staffs'))
     session_start();
 
 else
@@ -31,9 +31,9 @@ else
                 ?>
                 <form action=<?php $user = $_GET["user"]; echo '"loginVerification.php?user='.$user.'"'?> method="post">
                     <label for="email">Email:</label><br>
-                    <input id="input_email" type="email" name="input_email" placeholder="Enter your email" required><br>
+                    <input id="input_email" type="email" name="input_email" placeholder="Enter your email"><br>
                     <label for="password">Password:</label><br>
-                    <input id="input_password" type="password" name="input_password" placeholder="Enter your password" required><br>
+                    <input id="input_password" type="password" name="input_password" placeholder="Enter your password"><br>
                     <div id="submit_login_container"><input id="submit_login" type="submit"></div>
                 </form>
             </div>

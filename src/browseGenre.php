@@ -17,6 +17,8 @@ else {
     header('Location: browse.php');
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
