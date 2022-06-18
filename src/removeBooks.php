@@ -158,7 +158,7 @@ if (isset($_POST["confirm_remove_book_button"])) {
             }
         }
     ?>
-    <script src="js/removeBook.js"></script>
+    <script src="JS/removeBook.js"></script>
 
 </body>
 </html>

@@ -5,22 +5,22 @@ function selectBook(element) {
         if (which[j] == element) {
             if (which[j].style.backgroundColor == "") {
                 currentSelected = j;
-                which[j].style.backgroundColor = "rgb(120,120,120)";
+                which[j].style.backgroundColor = "rgb(51, 81, 69)";
                 document.getElementsByClassName("reserved_book_img_wrapper")[j].style.opacity = "0.5";
-                document.getElementsByClassName("reserved_book_wrapper")[j].style.color = "white";
+                document.getElementsByClassName("book_current_state")[j].style.color = "white";
             }
             else { //unselected
                 currentSelected = -1;
                 which[j].style.backgroundColor = "";
                 document.getElementsByClassName("reserved_book_img_wrapper")[j].style.opacity = "1.0";
-                document.getElementsByClassName("reserved_book_wrapper")[j].style.color = "black";
+                document.getElementsByClassName("book_current_state")[j].style.color = "rgb(30, 53, 47)";
                 break;
             }
         }
         else if (which[j].style.backgroundColor != "") {
             which[j].style.backgroundColor = "";
             document.getElementsByClassName("reserved_book_img_wrapper")[j].style.opacity = "1.0";
-            document.getElementsByClassName("reserved_book_wrapper")[j].style.color = "black";
+            document.getElementsByClassName("book_current_state")[j].style.color = "rgb(30, 53, 47)";
         }
     }
     if (currentSelected != -1) {

@@ -37,7 +37,7 @@
 }
 
 .reserved_book_wrapper:hover {
-    box-shadow: 1px 10px #888888;
+    box-shadow: 1px 10px rgb(30, 53, 47);
 }
 
 .reserved_book_wrapper:hover .reserved_book_img_wrapper{
@@ -68,7 +68,7 @@
 #book_option {
     width: 100%;
     color: white;
-    background-color: black;
+    background-color: rgb(30, 53, 47);
     padding: 15px 30px;
     border-radius: 2px;
     cursor: pointer;

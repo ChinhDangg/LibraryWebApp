@@ -103,6 +103,6 @@ if (!$con) {
 
     <?php include 'footer.php';?>
 
-    <script src="js/index.js"></script>
+    <script src="JS/index.js"></script>
 </body>
 </html>
