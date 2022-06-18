@@ -1,5 +1,5 @@
 # LibraryWebApp
-Databases used: Books, Students, Staffs, Reserved_Books, Borrowed_Books
+Databases used: Books, students, staffs, Reserved_Books, Borrowed_Books
 
 Fields used in Books: ISBN (Primary Key), Title, Author, Genre, Copies, Stock, Publisher, Published, Summary
 
