@@ -29,6 +29,18 @@ if ($_GET['isbn'] !== "") {
     if (mysqli_num_rows($result) < 1)
         header('Location: browse.php');
 
+    $user = $_COOKIE["username"];
+    if(isset($_POST['add_to_reservationList'])) {
+        $isbn = $row["ISBN"];
+        $user = str_replace("_", ".", $user);
+        $sql = "SELECT ID FROM Reserved_Books WHERE ISBN=$isbn AND Email='$user'";
+        $check_borrowed_sql = "SELECT ID FROM Borrowed_Books WHERE ISBN=$isbn AND Email='$user'";
+        if (mysqli_num_rows(mysqli_query($con, $sql)) < 1 && mysqli_num_rows(mysqli_query($con, $check_borrowed_sql)) < 1) { //if book is not in reservation list and in borrowed list
+            $sql = "INSERT INTO Reserved_Books (ISBN, Email, Available, Due)
+            VALUES ($isbn, '$user', 0, 0)"; //add new book to reservation list
+            $add_book_result = mysqli_query($con, $sql);;
+        }
+    }
 }
 else {
     header('Location: index.php');
@@ -142,7 +154,8 @@ else {
                 books = (books == "") ? "'.$row["ISBN"].'" : (books + ","+"'.$row["ISBN"].'");
                 document.cookie = "'.$user.'="+books+"; max-age=864000; path=/";
                 document.getElementById("cart_num_item_wrapper").innerHTML = books.split(",").length; //update cart number icon
-            }                 
+            }
+            location.href = "";                 
         });
 
         function getCookie(cname) { //from w3school.com - how to get cookie using js
