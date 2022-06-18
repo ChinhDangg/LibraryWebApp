@@ -2,18 +2,18 @@ let book_status_button = document.getElementsByClassName("book_status_option_wra
 let book_status_changes = [];
 for (let j = 0; j < book_status_button.length; j++) {
     book_status_button[j].addEventListener("click", function(event) {
-        let left_icon = document.getElementsByClassName("fa-caret-left")[j];
-        if (left_icon.style.visibility == "hidden" || left_icon.style.visibility == "") {
-            document.getElementsByClassName("book_status")[j].innerHTML = "Returned";
+        let current_book_status = document.getElementsByClassName("book_status")[j];
+        if (current_book_status.innerHTML == "Not Pickup") {
+            current_book_status.innerHTML = "Borrowed";
+            book_status_changes[j] = "Borrowed";
+        }
+        else if (current_book_status.innerHTML == "Borrowed") {
+            current_book_status.innerHTML = "Returned";
             book_status_changes[j] = "Ret";
-            document.getElementsByClassName("fa-caret-right")[j].style.visibility = "hidden";
-            left_icon.style.visibility = "visible";
         }
         else {
-            document.getElementsByClassName("book_status")[j].innerHTML = "Borrowed";
-            book_status_changes[j] = "";
-            left_icon.style.visibility = "hidden";
-            document.getElementsByClassName("fa-caret-right")[j].style.visibility = "visible";
+            current_book_status.innerHTML = "Not Pickup";
+            book_status_changes[j] = "Not Pickup";
         }
         if (anyChanges())
             document.getElementById("confirm_remove_book_wrapper").style.visibility = "visible";
@@ -39,7 +39,7 @@ for (let j = 0; j < time_input.length; j++) {
 
 function anyChanges() {
     for (let j = 0; j < book_status_changes.length; j++)
-        if (book_status_changes[j] == "Ret")
+        if (book_status_list[j] != book_status_changes[j])
             return true;
     for (let j = 0; j < time_due_changes.length; j++)
         if (time_due_changes[j] !== undefined && time_due_changes[j] != "")

@@ -17,10 +17,10 @@
             <div id="login_area_wrapper">
                 <h1>Welcome to University Library Login</h1>
                 <h3>Please select which user you are:</h3>
-                <a id="student_login_wrapper" href="login.php?user=Students">
+                <a id="student_login_wrapper" href="login.php?user=students">
                     <div id="student_login_button">Student</div>
                 </a>
-                <a id="staff_login_wrapper" href="login.php?user=Staffs">
+                <a id="staff_login_wrapper" href="login.php?user=staffs">
                     <div id="staff_login_button">Faculty/Staff</div>
                 </a>
             </div>

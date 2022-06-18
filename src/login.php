@@ -1,5 +1,5 @@
 <?php
-if (isset($_GET['user']) && ($_GET['user'] == 'Students' || $_GET['user'] == 'Staffs'))
+if (isset($_GET['user']) && ($_GET['user'] == 'students' || $_GET['user'] == 'staffs'))
     session_start();
 
 else

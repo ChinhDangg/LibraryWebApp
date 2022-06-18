@@ -34,7 +34,7 @@ input:not(#submit_login) {
 }
 
 #submit_login {
-    background-color: black;
+    background-color: rgb(30, 53, 47);
     color: white;
     padding: 15px 30px;
     border-radius: 2px;
