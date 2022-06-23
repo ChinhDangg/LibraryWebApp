@@ -21,6 +21,7 @@ nav .search_wrapper {
     min-height: 400px;
     margin-top: 40px;
     margin-bottom: 70px;
+    font-size: 2vh;
 }
 
 #manage_book_wrapper {
@@ -36,19 +37,17 @@ table, th, td {
     text-align: center;
 }
 
-.book_status_option_wrapper {
+.remove_option {
+    width: fit-content;
+    margin: auto auto;
     display: flex;
-    flex-direction: row;
-    align-items: center;
+}
+
+.remove1, .add1 {
+    padding: 0 5px;
+    color: white;
+    background-color: rgb(30, 53, 47);
     cursor: pointer;
-}
-
-.book_status_option_wrapper .fa-caret-left {
-    visibility: hidden;
-}
-
-.book_status {
-    margin: 0 5px;
 }
 
 #confirm_remove_book_wrapper {
@@ -66,14 +65,10 @@ table, th, td {
     border: none;
 }
 
-#borrowed_due_form {
-    display: flex;
-    justify-content: center;
+@media screen and (max-width: 400px) {
+    #manage_book_section {
+        font-size: 1vh;
+    }
 }
 
-#borrowed_due_input {
-    background-color: white;
-    border: unset;
-    font-weight: bold;
-    cursor: pointer;
-}
+

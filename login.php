@@ -14,9 +14,9 @@ else
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="University Library Website Application">
     <link rel="stylesheet" href="Font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/nav.css">
-    <link rel="stylesheet" type="text/css" href="css/footer.css">
-    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <link rel="stylesheet" type="text/css" href="CSS/nav.css">
+    <link rel="stylesheet" type="text/css" href="CSS/footer.css">
+    <link rel="stylesheet" type="text/css" href="CSS/login.css">
     <title>Login</title>
 </head>
 <body>
@@ -31,9 +31,9 @@ else
                 ?>
                 <form action=<?php $user = $_GET["user"]; echo '"loginVerification.php?user='.$user.'"'?> method="post">
                     <label for="email">Email:</label><br>
-                    <input id="input_email" type="email" name="input_email" placeholder="Enter your email"><br>
+                    <input id="input_email" type="email" name="input_email" placeholder="Enter your email" required><br>
                     <label for="password">Password:</label><br>
-                    <input id="input_password" type="password" name="input_password" placeholder="Enter your password"><br>
+                    <input id="input_password" type="password" name="input_password" placeholder="Enter your password" required><br>
                     <div id="submit_login_container"><input id="submit_login" type="submit"></div>
                 </form>
             </div>

@@ -2,7 +2,17 @@
 include 'loginCredential.php';
 if ($_COOKIE["user"] != "staffs")
     header ("Location: index.php");
-$con = new mysqli('mysql_db', 'root', 'root', 'uni_book_db');
+//Get Heroku ClearDB connection information
+$cleardb_url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+$cleardb_server = $cleardb_url["host"];
+$cleardb_username = $cleardb_url["user"];
+$cleardb_password = $cleardb_url["pass"];
+$cleardb_db = substr($cleardb_url["path"],1);
+$active_group = 'default';
+$query_builder = TRUE;
+// Connect to DB
+$con = mysqli_connect($cleardb_server, $cleardb_username, $cleardb_password, $cleardb_db);
+
 if (!$con) {
     echo "Fail";
     die("Connection failed: " .mysqli_connect_errno());
@@ -77,9 +87,9 @@ if (isset($_POST["confirm_remove_book_button"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="University Library Website Application">
     <link rel="stylesheet" href="Font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/nav.css">
-    <link rel="stylesheet" type="text/css" href="css/footer.css">
-    <link rel="stylesheet" type="text/css" href="css/manageBorrowed.css">
+    <link rel="stylesheet" type="text/css" href="CSS/nav.css">
+    <link rel="stylesheet" type="text/css" href="CSS/footer.css">
+    <link rel="stylesheet" type="text/css" href="CSS/manageBorrowed.css">
     <title>Manage Reserved Books</title>
 </head>
 <body>
