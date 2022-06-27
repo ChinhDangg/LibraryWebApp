@@ -12,6 +12,7 @@
     <title>User Check</title>
 </head>
 <body>
+    <div>some</div>
     <div id="body_content_container">
         <section id="login_area_section">
             <div id="login_area_wrapper">
