@@ -140,19 +140,17 @@ if(isset($_POST['book_option_button'])) {
                                 $days = round(($row["Due"]-time())/60/60/24);
                                 $reserved_book_availability = "Available - ".$days." days";
                             }
-                            echo '
-                                <div class="reserved_book_wrapper" onclick="selectBook(this)">
-                                    <div class="reserved_book_img_wrapper">
-                                        <img src="DisplayBooks/display1.jpg" alt="reservedBook">
-                                    </div>
-                                    <div class="availability_and_info_wrapper">
-                                        <div class="book_current_state">'.$reserved_book_availability.'</div>
-                            ';
                             $isbn = $row["ISBN"];
                             $sql = "SELECT Title, Author, ISBN FROM Books WHERE ISBN=$isbn";
                             $book_info_result = mysqli_query($con, $sql);
                             $book_info_row = mysqli_fetch_array($book_info_result);
-                                        echo '
+                            echo '
+                                <div class="reserved_book_wrapper" onclick="selectBook(this)">
+                                    <div class="reserved_book_img_wrapper">
+                                        <img src="'.$book_info_row["Pic"].'" alt="reservedBook">
+                                    </div>
+                                    <div class="availability_and_info_wrapper">
+                                        <div class="book_current_state">'.$reserved_book_availability.'</div>
                                             <div class="book_info_wrapper" style="display: none">
                                                 <h3>'.$book_info_row["Title"].'</h3>
                                                 <div>by '.$book_info_row["Author"].'</div>

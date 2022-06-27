@@ -20,13 +20,13 @@ function getSqlType($search_info) {
     if (preg_match('/^[0-9]+$/', $search_info)) { //contains number only
         if (strlen($search_info) == 13) { //length = 13
             global $sql;
-            $sql = "SELECT Title, Author, ISBN FROM Books WHERE ISBN=$search_info";
+            $sql = "SELECT Title, Author, ISBN, Pic FROM Books WHERE ISBN=$search_info";
         }
     }
     else {
         $search_info = preg_replace('/[^\da-z ]/i', '', $search_info);
         global $sql;
-        $sql = "SELECT Title, Author, ISBN FROM Books WHERE Author LIKE '%{$search_info}%' OR Title LIKE '%{$search_info}%'";
+        $sql = "SELECT Title, Author, ISBN, Pic FROM Books WHERE Author LIKE '%{$search_info}%' OR Title LIKE '%{$search_info}%'";
     }
 }
 
@@ -82,7 +82,7 @@ if (!empty($_POST["input_book_search"])) {
                             echo '
                             <div class="result_row">
                                 <a class="cover_wrapper" href="bookInfo.php?isbn='.$row["ISBN"].'">
-                                    <img src="DisplayBooks/display1.jpg" alt="result_img">
+                                    <img src="'.$row["Pic"].'" alt="result_img">
                                 </a>
                                 <a class="result_info_wrapper" href="bookInfo.php?isbn='.$row["ISBN"].'">
                                     <h3>'.$row["Title"].'</h3>

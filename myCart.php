@@ -90,14 +90,14 @@ if(isset($_POST['checkout_button'])) {
         $book_result_list = explode(",", $_COOKIE[$user]);
         for ($books = 0; $books < count($book_result_list); $books++) {
             $isbn = $book_result_list[$books];
-            $sql = "SELECT Title, Author, ISBN FROM Books WHERE ISBN='$isbn'";
+            $sql = "SELECT Title, Author, ISBN, Pic FROM Books WHERE ISBN='$isbn'";
             $result = mysqli_query($con, $sql);
             if (mysqli_num_rows($result) > 0) {
                 $row = mysqli_fetch_array($result);
                 echo '
                     <div class="result_row">
                         <div class="cover_wrapper">
-                            <a href="bookInfo.php?isbn='.$row["ISBN"].'"><img src="DisplayBooks/display1.jpg" alt="result_img"></a>
+                            <a href="bookInfo.php?isbn='.$row["ISBN"].'"><img src="'.$row["Pic"].'" alt="result_img"></a>
                         </div>
                         <div class="info_and_cart_wrapper">
                             <a href="bookInfo.php?isbn='.$row["ISBN"].'">

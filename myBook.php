@@ -81,7 +81,7 @@ $result = mysqli_query($con, $sql); //all reserved books from current user
                         $isbn = $row["ISBN"];
                         $day_remaining = round(($row["Due"]-time())/60/60/24);
                         $book_status = $row["Book_Status"];
-                        $sql = "SELECT Title, Author FROM Books WHERE ISBN=$isbn";
+                        $sql = "SELECT Title, Author, Pic FROM Books WHERE ISBN=$isbn";
                         $book_result = mysqli_query($con, $sql);
                         $book_row = mysqli_fetch_array($book_result);
                         // need to display overdue date
@@ -89,7 +89,7 @@ $result = mysqli_query($con, $sql); //all reserved books from current user
                             <div class="my_book_wrapper">
                                 <a href="bookInfo.php?isbn='.$isbn.'">
                                     <div class="my_book_img_wrapper">
-                                        <img src="DisplayBooks/display1.jpg" alt="myBook">
+                                        <img src="'.$$book_row["Pic"].'" alt="myBook">
                                     </div>
                                     <div class="book_info_wrapper">
                                         <h3>'.$book_row["Title"].'</h3>
