@@ -33,7 +33,7 @@ if ($_GET['isbn'] !== "") {
         $update_stock_result = mysqli_query($con, $sql); //update new stock
     }
 
-    $sql = "SELECT Title, Author, ISBN, Genre, Stock, Published, Summary, Publisher FROM Books WHERE ISBN='$isbn'";
+    $sql = "SELECT Title, Author, ISBN, Genre, Stock, Published, Summary, Publisher, Pic FROM Books WHERE ISBN='$isbn'";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_array($result);
     if (mysqli_num_rows($result) < 1)
@@ -77,7 +77,7 @@ else {
         <section id="book_info_section">
             <div id="book_info_wrapper">
                 <div id="book_img_wrapper">
-                    <img src="DisplayBooks/display1.jpg" alt="">
+        <?php echo '<img src="'.$row["Pic"].'" alt="">'; ?>
                     <div id="book_year_wrapper">
                         <div id="book_year">Year Published: <?php echo $row["Published"]?></div>
                     </div>
