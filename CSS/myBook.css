@@ -33,12 +33,15 @@
 .my_book_wrapper {
     margin-bottom: 30px;
     margin-left: 10px;
-    width: 200px;
-    height: 250px;
 }
 
 a:hover .my_book_img_wrapper {
     box-shadow: 1px 1px 1px 1px rgb(200,200,200);
+}
+
+.my_book_img_wrapper {
+    width: 200px;
+    height: 250px;
 }
 
 .my_book_img_wrapper img {
