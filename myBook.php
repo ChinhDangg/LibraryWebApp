@@ -89,7 +89,7 @@ $result = mysqli_query($con, $sql); //all reserved books from current user
                             <div class="my_book_wrapper">
                                 <a href="bookInfo.php?isbn='.$isbn.'">
                                     <div class="my_book_img_wrapper">
-                                        <img src="'.$$book_row["Pic"].'" alt="myBook">
+                                        <img src="'.$book_row["Pic"].'" alt="myBook">
                                     </div>
                                     <div class="book_info_wrapper">
                                         <h3>'.$book_row["Title"].'</h3>
