@@ -41,8 +41,8 @@ if (!$con) {
         
         <section id="manage_book_section">
             <div id="manage_book_wrapper" method="post">
-                <div><a href="addNewBook.php">Add new Book</a></div>
-                <div><a href="removeBooks.php">Remove Books</a></div>
+                <div><a href="addNewBook.php">Create new Book</a></div>
+                <div><a href="removeBooks.php">Remove/Add Books</a></div>
                 <div><a href="manageReserved.php">Manage Reserved Books</a></div>
                 <div><a href="manageBorrowed.php">Manage Borrowed Books</a></div>
             </div>

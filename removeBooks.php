@@ -74,14 +74,14 @@ if (isset($_POST["confirm_remove_book_button"])) {
     <link rel="stylesheet" type="text/css" href="CSS/nav.css">
     <link rel="stylesheet" type="text/css" href="CSS/footer.css">
     <link rel="stylesheet" type="text/css" href="CSS/removeBooks.css">
-    <title>Remove Books</title>
+    <title>Remove/Add Books</title>
 </head>
 <body>
     <?php include 'nav.php';?>
 
     <div id="body_content_container">
         <div id="manage_header_wrapper">
-            <h1 id="manage_header">Manage Books/Remove Books</h1>
+            <h1 id="manage_header">Manage Books|Remove/Add Books</h1>
         </div>
 
         <div class="search_wrapper">

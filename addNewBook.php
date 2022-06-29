@@ -55,14 +55,14 @@ if (isset($_POST["submit_add_button"])) {
     <link rel="stylesheet" type="text/css" href="CSS/nav.css">
     <link rel="stylesheet" type="text/css" href="CSS/footer.css">
     <link rel="stylesheet" type="text/css" href="CSS/addNewBook.css">
-    <title>Add new Book</title>
+    <title>Create new Book</title>
 </head>
 <body>
     <?php include 'nav.php';?>
 
     <div id="body_content_container">
         <div id="manage_header_wrapper">
-            <h1 id="manage_header">Manage Books/Add new Book</h1>
+            <h1 id="manage_header">Manage Books/Create new Book</h1>
         </div>
         
         <section id="manage_book_section">
