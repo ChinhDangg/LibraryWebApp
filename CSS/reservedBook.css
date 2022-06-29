@@ -34,6 +34,8 @@
 .reserved_book_wrapper {
     margin-left: 5px;
     margin-bottom: 5px;
+    width: 200px;
+    height: 250px;
 }
 
 .reserved_book_wrapper:hover {
