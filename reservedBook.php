@@ -141,7 +141,7 @@ if(isset($_POST['book_option_button'])) {
                                 $reserved_book_availability = "Available - ".$days." days";
                             }
                             $isbn = $row["ISBN"];
-                            $sql = "SELECT Title, Author, ISBN FROM Books WHERE ISBN=$isbn";
+                            $sql = "SELECT Title, Author, ISBN, Pic FROM Books WHERE ISBN=$isbn";
                             $book_info_result = mysqli_query($con, $sql);
                             $book_info_row = mysqli_fetch_array($book_info_result);
                             echo '
